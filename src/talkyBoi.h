@@ -18,10 +18,6 @@ typedef struct struct_message{
   int test9;
   int test10;
   int test11;
-  int test12;
-  int test13;
-  int test14;
-  int test15;
 }struct_message;
  
 struct_message msg_to_send;
@@ -68,6 +64,26 @@ void init_wifi (){
 }
 
 void send (){
+  msg_to_send.test1 = 1;
+  msg_to_send.test2 = 2;
+  msg_to_send.test3 = 3;
+  msg_to_send.test4 = 4;
+  msg_to_send.test5 = 5;
+  msg_to_send.test6 = 6;
+  msg_to_send.test7 = 7;
+  msg_to_send.test8 = 8;
+  msg_to_send.test9 = 9;
+  msg_to_send.test10 = 10;
+  msg_to_send.test11 = 11;
+  esp_err_t result = esp_now_send(broadcastAdress, (uint8_t *) &msg_to_send, sizeof(msg_to_send));
+ 
+  if (result == ESP_OK) {
+    Serial.println("Sent with success");
+  }
+  else {
+    Serial.println("Error sending the data");
+  }
+  delay(1000);
 
 }
 
