@@ -2,22 +2,31 @@
 #include <WiFi.h>
 #include <esp_now.h>
 
-uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE4,0x84,0x34}; //MAC-adress till den svarta
+uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE6,0x79,0x9C}; //MAC-adress till den svarta
 //uint8_t broadcastAdress[] = {0x7C,0x9E,0xBD,0x60,0xD1,0x8C}; //MAC till den med kondensatorn
 //uint8_t broadcastAdress[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4}; //MAC till den med vit tejp
 
+int recID = 0;
+int error = 0;
+int succ = 0;
+
 typedef struct struct_message{
-  int test1;
-  int test2;
-  int test3;
-  int test4;
-  int test5;
-  int test6;
-  int test7;
-  int test8;
-  int test9;
-  int test10;
-  int test11;
+  int msgID;
+  float test1;
+  float test2;
+  float test3;
+  float test4;
+  float test5;
+  float test6;
+  float test7;
+  float test8;
+  float test9;
+  float test10;
+  float test11;
+  float test12;
+  float test13;
+  float test14;
+  float test15;
 }struct_message;
  
 struct_message msg_to_send;
@@ -27,13 +36,17 @@ struct_message testINC;
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
     Serial.print("\r\nLast Packet Send Status:\t");
     Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
+    if(status == ESP_NOW_SEND_FAIL ? error++ : succ++);
+    Serial.println(error);
 }
 
 // Callback when data is received, triggas när något mottas (används ej)
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&testINC, incomingData, sizeof(testINC));
-  Serial.print("Bytes received: ");
-  Serial.println(len);
+  //Serial.print("Bytes received: ");
+  //Serial.println(len);
+  //Serial.println(testINC.test1);
+  recID++;
 }
 
 void getMACAdress(){
@@ -42,7 +55,8 @@ void getMACAdress(){
 }
 
 void init_wifi (){
-    WiFi.mode(WIFI_STA);
+  msg_to_send.msgID = 1;
+  WiFi.mode(WIFI_STA);
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
@@ -63,8 +77,8 @@ void init_wifi (){
   esp_now_register_recv_cb(OnDataRecv);
 }
 
-void send (){
-  msg_to_send.test1 = 1;
+void send (float angle1){
+  msg_to_send.test1 = angle1;
   msg_to_send.test2 = 2;
   msg_to_send.test3 = 3;
   msg_to_send.test4 = 4;
@@ -83,10 +97,9 @@ void send (){
   else {
     Serial.println("Error sending the data");
   }
-  delay(1000);
-
 }
 
 void recieve () {
 
 }
+

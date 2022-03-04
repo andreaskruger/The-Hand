@@ -1,11 +1,15 @@
 #include <Arduino.h>
 #include <readFingers.h>
+#include <talkyBoi.h>
 
 const int flexpin = 32;
 
 void setup() {
   initFlexRead();
   Serial.begin(115200);
+  delay(100);
+  getMACAdress();
+  init_wifi();
 }
 
 void loop() {
@@ -27,7 +31,8 @@ void loop() {
   //  }
 
   Serial.println(String( getAngle(readResistance(flexpin)))  );
-
+  send(getAngle(readResistance(flexpin)));
 
   delay(200);
 }
+
