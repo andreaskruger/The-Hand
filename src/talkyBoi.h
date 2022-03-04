@@ -11,7 +11,6 @@ int error = 0;
 int succ = 0;
 
 typedef struct struct_message{
-  int msgID;
   float test1;
   float test2;
   float test3;
