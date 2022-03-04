@@ -6,7 +6,7 @@
 const float VCC = 3.3;			// voltage at Ardunio 5V line
 const float R_DIV = 100000.0;	// resistor used to create a voltage divider
 
-void initFlexSensor(int pin){
+void initFlexSensor(int pin1,int pin2){
     pinMode(pin, INPUT);
 }
 
@@ -22,3 +22,4 @@ float getAngle(int pin){
     float angle = readResistance(pin) * 2.6716/1000 - 30.2045 - 60; //From Matlab calibration
     return angle;
 }
+

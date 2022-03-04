@@ -3,10 +3,10 @@
 #include <talkyBoi.h>
 
 const int f1PIP_Pin = 32;			// Pin connected to voltage divider output for the 1st fingers PIP joint
-const int f1MCP_Pin = 33;			// Pin connected to voltage divider output for the 1st fingers MIP joint
+const int f1MCP_Pin = 33;			// Pin connected to voltage divider output for the 1st fingers MCP joint
 
 void setup() {
-  initFlexSensor(f1PIP_Pin);
+  initFlexSensor(f1PIP_Pin,f1MCP_Pin);
   Serial.begin(115200);
   delay(100);
   getMACAdress();
@@ -15,10 +15,7 @@ void setup() {
 
 void loop() {
 
-<<<<<<< HEAD
   float angle1PIP = getAngle(f1PIP_Pin);
-
-=======
 
   //for reading all flexsensors and creating a list to be send
   //float *pointer = getAngleList();
@@ -35,10 +32,12 @@ void loop() {
   //      Serial.println( String( getAngle(readResistance(pins[i])) ) );
   //  }
 
-  Serial.println(String( getAngle(readResistance(flexpin)))  );
-  send(getAngle(readResistance(flexpin)));
->>>>>>> b71db67015947c6e1976bda65de5728ea4f33079
+ // Serial.println(String(angle1PIP) + " " + String(angle1MCP));
 
-  delay(200);
+  send(angle1PIP, 45);
+  Serial.println(angle1PIP);
+  //Serial.println(angle1MCP);
+
+  delay(10);
 }
 

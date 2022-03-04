@@ -54,7 +54,6 @@ void getMACAdress(){
 }
 
 void init_wifi (){
-  msg_to_send.msgID = 1;
   WiFi.mode(WIFI_STA);
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
@@ -76,9 +75,9 @@ void init_wifi (){
   esp_now_register_recv_cb(OnDataRecv);
 }
 
-void send (float angle1){
+void send (float angle1, float angle2){
   msg_to_send.test1 = angle1;
-  msg_to_send.test2 = 2;
+  msg_to_send.test2 = angle2;
   msg_to_send.test3 = 3;
   msg_to_send.test4 = 4;
   msg_to_send.test5 = 5;
