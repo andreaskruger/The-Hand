@@ -25,7 +25,8 @@ float readResistance(int pin){
 }
 
 float getAngle(float resistance){
-    float angle = resistance * 3.8 / 1000 - 102.5; //From Matlab calibration
+    float angle = resistance * 2.6716/1000 - 30.2045 - 60; //From Matlab calibration
+    return angle;
 }
 
 float *getAngleList(){
@@ -38,16 +39,16 @@ float *getAngleList(){
     return angles;
 }
 
-void printAngleList(){
-    Serial.println('Angle list: ');
-    Serial.println(sizeof(fingerpins));
-    delay(2000);
+//void printAngleList(){
+//    Serial.println('Angle list: ');
+//    Serial.println(sizeof(fingerpins));
+//    delay(2000);
 
-    for(int i = 1; i <= 1; i++){     // OBS hårdkodad!!!!!
+//    for(int i = 1; i <= 1; i++){     // OBS hårdkodad!!!!!
         //Serial.println('index: ' + String(i) + ' Value: ' + String( getAngle(readResistance(pins[i])) ) );
        
-        delay(1000);
-        Serial.println('index: ' + String(i) + ' Value: ' + String(readResistance(fingerpins[i])));
-    }
+//        delay(1000);
+//        Serial.println('index: ' + String(i) + ' Value: ' + String(readResistance(fingerpins[i])));
+//    }
 
-}
+//}

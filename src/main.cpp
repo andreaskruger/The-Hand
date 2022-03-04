@@ -26,7 +26,7 @@ void loop() {
   //      Serial.println( String( getAngle(readResistance(pins[i])) ) );
   //  }
 
-  Serial.println(String( getAngle(readResistance(flexpin)) ) );
+  Serial.println(String( getAngle(readResistance(flexpin)))  );
 
 
   delay(200);
