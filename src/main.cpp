@@ -6,8 +6,9 @@ const int f1PIP_Pin = 32;			// Pin connected to voltage divider output for the 1
 const int f1MCP_Pin = 33;			// Pin connected to voltage divider output for the 1st fingers MCP joint
 
 void setup() {
-  initFlexSensor(f1PIP_Pin,f1MCP_Pin);
   Serial.begin(115200);
+  initFlexSensor(f1PIP_Pin);
+  initFlexSensor(f1MCP_Pin);
   delay(100);
   getMACAdress();
   init_wifi();
@@ -16,6 +17,7 @@ void setup() {
 void loop() {
 
   float angle1PIP = getAngle(f1PIP_Pin);
+  float angle1MCP = getAngle(f1MCP_Pin);
 
   //for reading all flexsensors and creating a list to be send
   //float *pointer = getAngleList();
@@ -34,9 +36,11 @@ void loop() {
 
  // Serial.println(String(angle1PIP) + " " + String(angle1MCP));
 
-  send(angle1PIP, 45);
+  send(angle1PIP, angle1MCP);
+  Serial.print("PIP: ");
   Serial.println(angle1PIP);
-  //Serial.println(angle1MCP);
+  Serial.print("MCP: ");
+  Serial.println(angle1MCP);
 
   delay(10);
 }

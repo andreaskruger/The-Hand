@@ -6,7 +6,7 @@
 const float VCC = 3.3;			// voltage at Ardunio 5V line
 const float R_DIV = 100000.0;	// resistor used to create a voltage divider
 
-void initFlexSensor(int pin1,int pin2){
+void initFlexSensor(int pin){
     pinMode(pin, INPUT);
 }
 
