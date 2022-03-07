@@ -8,7 +8,7 @@ const int f1PIP_Pin = 32;			// Pin connected to voltage divider output for the 1
 const int f1MCP_Pin = 33;			// Pin connected to voltage divider output for the 1st fingers MCP joint
 const int pinList[] = {5,8,12,13,10,11};
 const int sizeList = sizeof(pinList)/sizeof(int);
-float fingerAngles[9];
+float fingerAngles[9] = {0,0,0,0,0,0,0,0,0,0};
 int sendID = 0;
 
 int buttonRun = 0;
