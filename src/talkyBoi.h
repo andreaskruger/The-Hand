@@ -7,7 +7,6 @@ uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE6,0x79,0x9C}; //MAC-adress till d
 //uint8_t broadcastAdress[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4}; //MAC till den med vit tejp
 
 int recID = 0;
-int sendID = 0;
 int error = 0;
 int succ = 0;
 
@@ -80,28 +79,20 @@ void init_wifi (){
   esp_now_register_recv_cb(OnDataRecv);
 }
 
-void send (float angle1, float angle2){
-  sendID++;
+void send (float sendID, float thumbIP, float thumbMCP, float finger1PIP, float finger1MCP, float finger2PIP, float finger2MCP, float finger3PIP, float finger3MCP, float finger4PIP, float finger4MCP){
   msg_to_send.sendID = sendID;
-  msg_to_send.thumbIP = angle1;
-  msg_to_send.thumbMCP = angle2;
-  msg_to_send.finger1PIP = 3;
-  msg_to_send.finger1MCP = 4;
-  msg_to_send.finger2PIP = 5;
-  msg_to_send.finger2MCP = 6;
-  msg_to_send.finger3PIP = 7;
-  msg_to_send.finger3MCP = 8;
-  msg_to_send.finger4PIP = 9;
-  msg_to_send.finger4MCP = 10;
-  
+  msg_to_send.thumbIP = thumbIP;
+  msg_to_send.thumbMCP = thumbMCP;
+  msg_to_send.finger1PIP = finger1PIP;
+  msg_to_send.finger1MCP = finger1MCP;
+  msg_to_send.finger2PIP = finger2PIP;
+  msg_to_send.finger2MCP = finger2MCP;
+  msg_to_send.finger3PIP = finger3PIP;
+  msg_to_send.finger3MCP = finger3MCP;
+  msg_to_send.finger4PIP = finger4PIP;
+  msg_to_send.finger4MCP = finger4MCP;
+
   esp_err_t result = esp_now_send(broadcastAdress, (uint8_t *) &msg_to_send, sizeof(msg_to_send));
- 
-  if (result == ESP_OK) {
-    Serial.println("Sent with success");
-  }
-  else {
-    Serial.println("Error sending the data");
-  }
 }
 
 void recieve () {
