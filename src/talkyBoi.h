@@ -38,11 +38,8 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
     Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
     if(status == ESP_NOW_SEND_FAIL){
       error++;
-
     }else{ 
       succ++;
-
-
     }
 }
 
@@ -98,4 +95,3 @@ void send (float sendID, float thumbIP, float thumbMCP, float finger1PIP, float 
 void recieve () {
 
 }
-

@@ -33,10 +33,6 @@ void setup(){
      *  (*) No more than VDD + 0.3 V must be applied to this device. 
      */
     ads1118.setFullScaleRange(ads1118.FSR_4096);
-
-  
-    
-  
 }
 
 
