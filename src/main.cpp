@@ -2,32 +2,47 @@
 #include <readFingers.h>
 #include <talkyBoi.h>
 
-#define interuptPin = 17;
+#define interuptPin 17
 
-const int f1PIP_Pin = 32;			// Pin connected to voltage divider output for the 1st fingers PIP joint
-const int f1MCP_Pin = 33;			// Pin connected to voltage divider output for the 1st fingers MCP joint
-const int pinList[] = {5,8,12,13,10,11};
+
+// Pin connected to voltage divider output. used for analogRead to get resistance of the flexsensors
+const int f1PIP_Pin = 36;			
+const int f1MCP_Pin = 39;			
+const int f2PIP_Pin = 32;
+const int f2MCP_Pin = 33;
+const int f3PIP_Pin = 34;
+const int f3MCP_Pin = 35;
+const int f4PIP_Pin = 32;
+const int f4MCP_Pin = 32;
+const int thumbIP_Pin = 32;
+const int thumbMCP_Pin = 32;
+const int pinList[] = {thumbIP_Pin, thumbMCP_Pin, f1PIP_Pin, f1MCP_Pin, f2PIP_Pin, f2MCP_Pin, f3PIP_Pin, f3MCP_Pin, f4PIP_Pin,f4MCP_Pin};
 const int sizeList = sizeof(pinList)/sizeof(int);
-float fingerAngles[9] = {0,0,0,0,0,0,0,0,0,0};
+float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
 int sendID = 0;
 
 int buttonRun = 0;
 int state = 0;
 
-
 void interuptFunc(){
-  if (buttonRun){
-    buttonRun = 0;
-    state = 0;
-  }else{
-    buttonRun = 1;
-    state = 1;
+  static unsigned long last_interuptTime = 0;
+  unsigned long interupt_time = millis();
+  if(interupt_time - last_interuptTime){
+    if (buttonRun){
+      buttonRun = 0;
+      state = 0;
+    }else{
+      buttonRun = 1;
+      state = 1;
+    }
   }
+  last_interuptTime = interupt_time;
 }
+
+
 
 void setup() {
   Serial.begin(115200);
-  
   delay(100);
   getMACAdress();//MAC adress är vad som körs för att WIFI ska funkar, den ANDRA bärands MAC adress ska skrivas in i denna koden och tvärtom.
   init_wifi();//Initierar ESP_NOW
