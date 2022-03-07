@@ -44,18 +44,18 @@ void interuptFunc(){
 void setup() {
   Serial.begin(115200);
   delay(100);
-  getMACAdress();//MAC adress är vad som körs för att WIFI ska funkar, den ANDRA bärands MAC adress ska skrivas in i denna koden och tvärtom.
-  init_wifi();//Initierar ESP_NOW
-  for(int i = 0; i<sizeList; i++){ //Initierar alla flexsensorer vi vill använda. 
+  getMACAdress();                                               //MAC adress är vad som körs för att WIFI ska funkar, den ANDRA bärands MAC adress ska skrivas in i denna koden och tvärtom.
+  init_wifi();                                                  //Initierar ESP_NOW
+  for(int i = 0; i<sizeList; i++){                              //Initierar alla flexsensorer vi vill använda. 
     initFlexSensor(pinList[i]);
   }
-  attachInterrupt(17, interuptFunc, HIGH); // interupt för start/stopp knapp
+  attachInterrupt(17, interuptFunc, HIGH);                      // interupt för start/stopp knapp
 }
 
 void loop() {
-  //while(!state){}  //Ta bort kommentar för att ha en knapp som låser/öppnar programmet när det körs. Behöver en  debounce för knappen innan det funkar.
+  //while(!state){}                                             //Ta bort kommentar för att ha en knapp som låser/öppnar programmet när det körs. Behöver en  debounce för knappen innan det funkar.
 
-  for(int i = 0; i<sizeList; i++){//Läser alla sensorer och lägger i en lista
+  for(int i = 0; i<sizeList; i++){                              //Läser alla sensorer och lägger i en lista
     fingerAngles[i] = getAngle(pinList[i]);
   }
 
