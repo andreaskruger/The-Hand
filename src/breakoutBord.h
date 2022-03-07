@@ -1,4 +1,3 @@
-
 #include <Arduino.h>
 #include "ADS1118.h"
 #include <SPI.h>
