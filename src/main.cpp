@@ -20,9 +20,9 @@ void setup() {
 }
 
 void loop() {
-  fingerAngles[0] = getAngle();
-  float angle1PIP = getAngle(f1PIP_Pin);
-  float angle1MCP = getAngle(f1MCP_Pin);
+  for(int i = 0; i<sizeList; i++){
+    fingerAngles[i] = getAngle(pinList[i]);
+  }
 
   //for reading all flexsensors and creating a list to be send
   //float *pointer = getAngleList();
@@ -40,8 +40,7 @@ void loop() {
   //  }
 
  // Serial.println(String(angle1PIP) + " " + String(angle1MCP));
-
-  send(angle1PIP, angle1MCP);
+  
   Serial.print("PIP: ");
   Serial.println(angle1PIP);
   Serial.print("MCP: ");
