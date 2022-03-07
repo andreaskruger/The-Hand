@@ -11,17 +11,18 @@ int error = 0;
 int succ = 0;
 
 typedef struct struct_message{
-  float test1;
-  float test2;
-  float test3;
-  float test4;
-  float test5;
-  float test6;
-  float test7;
-  float test8;
-  float test9;
-  float test10;
-  float test11;
+  int sendID;
+  float thumbIP;
+  float thumbMCP;
+  float finger1PIP;
+  float finger1MCP;
+  float finger2PIP;
+  float finger2MCP;
+  float finger3PIP;
+  float finger3MCP;
+  float finger4PIP;
+  float finger4MCP;
+  float thumbOpp;
   float test12;
   float test13;
   float test14;
@@ -29,23 +30,26 @@ typedef struct struct_message{
 }struct_message;
  
 struct_message msg_to_send;
-struct_message testINC;
+struct_message msg_incoming;
 
 // Callback when data is sent, triggas när något skickas
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
     Serial.print("\r\nLast Packet Send Status:\t");
     Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
-    if(status == ESP_NOW_SEND_FAIL ? error++ : succ++);
-    Serial.println(error);
+    if(status == ESP_NOW_SEND_FAIL){
+      error++;
+
+    }else{ 
+      succ++;
+
+
+    }
 }
 
 // Callback when data is received, triggas när något mottas (används ej)
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
-  memcpy(&testINC, incomingData, sizeof(testINC));
-  //Serial.print("Bytes received: ");
-  //Serial.println(len);
-  //Serial.println(testINC.test1);
-  recID++;
+  memcpy(&msg_incoming, incomingData, sizeof(msg_incoming));
+  recID = msg_incoming.sendID;
 }
 
 void getMACAdress(){
@@ -75,26 +79,20 @@ void init_wifi (){
   esp_now_register_recv_cb(OnDataRecv);
 }
 
-void send (float angle1, float angle2){
-  msg_to_send.test1 = angle1;
-  msg_to_send.test2 = angle2;
-  msg_to_send.test3 = 3;
-  msg_to_send.test4 = 4;
-  msg_to_send.test5 = 5;
-  msg_to_send.test6 = 6;
-  msg_to_send.test7 = 7;
-  msg_to_send.test8 = 8;
-  msg_to_send.test9 = 9;
-  msg_to_send.test10 = 10;
-  msg_to_send.test11 = 11;
+void send (float sendID, float thumbIP, float thumbMCP, float finger1PIP, float finger1MCP, float finger2PIP, float finger2MCP, float finger3PIP, float finger3MCP, float finger4PIP, float finger4MCP){
+  msg_to_send.sendID = sendID;
+  msg_to_send.thumbIP = thumbIP;
+  msg_to_send.thumbMCP = thumbMCP;
+  msg_to_send.finger1PIP = finger1PIP;
+  msg_to_send.finger1MCP = finger1MCP;
+  msg_to_send.finger2PIP = finger2PIP;
+  msg_to_send.finger2MCP = finger2MCP;
+  msg_to_send.finger3PIP = finger3PIP;
+  msg_to_send.finger3MCP = finger3MCP;
+  msg_to_send.finger4PIP = finger4PIP;
+  msg_to_send.finger4MCP = finger4MCP;
+
   esp_err_t result = esp_now_send(broadcastAdress, (uint8_t *) &msg_to_send, sizeof(msg_to_send));
- 
-  if (result == ESP_OK) {
-    Serial.println("Sent with success");
-  }
-  else {
-    Serial.println("Error sending the data");
-  }
 }
 
 void recieve () {
