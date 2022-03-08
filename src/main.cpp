@@ -5,6 +5,7 @@
 #define interuptPin 17
 
 
+
 // Pin connected to voltage divider output. used for analogRead to get resistance of the flexsensors
 const int f1PIP_Pin = 36;			
 const int f1MCP_Pin = 39;			
@@ -61,6 +62,7 @@ void loop() {
 
   sendID++;
   send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
+  delay(10);
   delay(10);
 }
 
