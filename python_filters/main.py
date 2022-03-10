@@ -1,5 +1,6 @@
 #%%
 from random import randint
+from statistics import median
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -7,7 +8,7 @@ import numpy as np
 # Returns an array that is _sample_ times smaller than the given one.
 # Sample sets the size of the sample window.
 # Outliers is the number of elements to remove from top and bottom of each sample window.
-def medianFilter(array: float, sample: int, outliers: int):
+def medianFilter(array, sample: int, outliers: int):
     # Start _sample_ indexes in
     # Take _sample_ steps
     returnArr = []
@@ -15,7 +16,7 @@ def medianFilter(array: float, sample: int, outliers: int):
         medianArr = []
         # Add 50 samples to the array
         for j in range(i - sample, i):
-            medianArr.append(y[j])
+            medianArr.append(float(array[j]))
         
         # Sort the median array
         medianArr.sort()
@@ -25,32 +26,52 @@ def medianFilter(array: float, sample: int, outliers: int):
     
     return returnArr
 
+# Open file with data
+with open("unfiltered_signal", "r") as unfilteredFile:
+    unfilteredData = unfilteredFile.readlines()
+with open("filtered_signal", "r") as filteredFile:
+    filteredData = filteredFile.readlines()
+
+# Convert string to float
+for i in range(0, len(unfilteredData) - 1):
+    unfilteredData[i] = float(unfilteredData[i])
+for i in range(0, len(filteredData) - 1):
+    filteredData[i] = float(filteredData[i])
+    
+print("Files opened successfully!")
+
 #%%
-mean, stddev = 0.5, 150
-
 # X-axis config
-x = np.arange(1, 1001, 0.2)
-# Noise config
-noise = np.random.normal(mean, stddev, 5000)
-# Data ("signal") to plot with added noise
-y = np.arange(10000, 15000, 1) + noise
-# Add more spike noise
-for i in range(0, len(y)-1):
-    r = randint(0, 100)
-    if r >= 99:
-        y[i] = y[i] + randint(-3000, 3000)
+x = np.arange(0, 500, 1)
 
-# Apply the filter to the raw signal 
-medianFilterArr = medianFilter(y, 50, 5)
+# Plot the unfiltered signal
+plt.plot(x, unfilteredData, label = "No filter")
+# Plot the filtered signal
+#plt.plot(x, filteredData, label="Capacitor")
 
-# Plot the raw signal
-plt.plot(x, y)
-# Plot the filtered signal, which is 50 times smaller than the raw
-x = np.arange(1, 990, 10)
-plt.plot(x, medianFilterArr)
+plt.yticks(np.arange(0, 300, 50))
+plt.ylabel("Sensor value")
+plt.xlabel("Measurement")
+plt.title("Unfiltered vs. capacitor filtered signal")
 
-plt.ylabel("Sensor resistance")
-plt.xlabel("Time, ms")
-plt.title("Raw vs. unfiltered signal")
+# %%
+# Plot the median filtered data, both for both the previous signals
+#plt.clf()
+medUnfilteredData = medianFilter(unfilteredData, 20, 4)
+medFilteredData = medianFilter(filteredData, 20, 4)
+
+
+# Config x axis
+x = np.arange(0, 501, 501%len(medUnfilteredData))
+
+# Plot the unfiltered signal
+plt.plot(x, medUnfilteredData, label="No filter")
+# Plot the filtered signal
+#plt.plot(x, medFilteredData, label="Capacitor")
+
+plt.legend()
+plt.ylabel("Sensor value")
+plt.xlabel("Measurement")
+plt.title("Same data but with median filter")
 
 # %%
