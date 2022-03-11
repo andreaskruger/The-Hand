@@ -20,6 +20,7 @@ const int pinList[] = {thumbIP_Pin, thumbMCP_Pin, f1PIP_Pin, f1MCP_Pin, f2PIP_Pi
 const int sizeList = sizeof(pinList)/sizeof(int);
 float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
 int sendID = 0;
+int o = 0;
 
 int buttonRun = 0;
 int state = 0;
@@ -58,9 +59,13 @@ void loop() {
   for(int i = 0; i<sizeList; i++){                              //Läser alla sensorer och lägger i en lista
     fingerAngles[i] = getAngle(pinList[i]);
   }
-
   sendID++;
+
   send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
-  delay(10);
+  
+  sendToModel(o,1.0,1.0);
+  o++;
+  delay(1000);
+
 }
 

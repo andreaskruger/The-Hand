@@ -2,9 +2,10 @@
 #include <WiFi.h>
 #include <esp_now.h>
 
-uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE6,0x79,0x9C}; //MAC-adress till den svarta
-//uint8_t broadcastAdress[] = {0x7C,0x9E,0xBD,0x60,0xD1,0x8C}; //MAC till den med kondensatorn
-//uint8_t broadcastAdress[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4}; //MAC till den med vit tejp
+//uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE6,0x79,0x9C}; //MAC-adress till den svarta
+uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8}; //MAC-adress till den silver
+//uint8_t broadcastAdress[] = {0x7C,0x9E,0xBD,0x60,0xD1,0x8C}; //MAC till den med maskering
+//uint8_t broadcastAdressModel[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4}; //MAC till den med vit tejp
 
 int recID = 0;
 int error = 0;
@@ -35,6 +36,18 @@ struct_message msg_incoming;
 // Callback when data is sent, triggas när något skickas
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
     Serial.print("\r\nLast Packet Send Status:\t");
+    //Serial.write((String)mac_addr));
+    Serial.print(mac_addr[0], HEX);
+    Serial.print(",");
+    Serial.print(mac_addr[1], HEX);
+    Serial.print(",");
+    Serial.print(mac_addr[2], HEX);
+    Serial.print(",");
+    Serial.print(mac_addr[3], HEX);
+    Serial.print(",");
+    Serial.print(mac_addr[4], HEX);
+    Serial.print(",");
+    Serial.println(mac_addr[5], HEX);
     Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
     if(status == ESP_NOW_SEND_FAIL){
       error++;
@@ -47,6 +60,12 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&msg_incoming, incomingData, sizeof(msg_incoming));
   recID = msg_incoming.sendID;
+  Serial.print(recID);
+  Serial.print(",");
+  Serial.print(recID);
+  Serial.print(",");
+  Serial.println(recID);
+  
 }
 
 void getMACAdress(){
@@ -77,6 +96,7 @@ void init_wifi (){
 }
 
 void send (float sendID, float thumbIP, float thumbMCP, float finger1PIP, float finger1MCP, float finger2PIP, float finger2MCP, float finger3PIP, float finger3MCP, float finger4PIP, float finger4MCP){
+  uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8};
   msg_to_send.sendID = sendID;
   msg_to_send.thumbIP = thumbIP;
   msg_to_send.thumbMCP = thumbMCP;
@@ -91,7 +111,12 @@ void send (float sendID, float thumbIP, float thumbMCP, float finger1PIP, float 
 
   esp_err_t result = esp_now_send(broadcastAdress, (uint8_t *) &msg_to_send, sizeof(msg_to_send));
 }
-
+void sendToModel(int sendID, float thumbIP, float thumbMCP){
+  Serial.println("Send to model : ");
+  uint8_t broadcastAdress[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4};
+  msg_to_send.sendID = sendID;
+  esp_err_t result = esp_now_send(broadcastAdress,(uint8_t *) &msg_to_send, sizeof(msg_to_send));
+}
 void recieve () {
-
+  
 }
