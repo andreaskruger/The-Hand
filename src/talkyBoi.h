@@ -3,9 +3,9 @@
 #include <esp_now.h>
 
 //uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE6,0x79,0x9C}; //MAC-adress till den svarta
-uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8}; //MAC-adress till den silver
+//uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8}; //MAC-adress till den silver
 //uint8_t broadcastAdress[] = {0x7C,0x9E,0xBD,0x60,0xD1,0x8C}; //MAC till den med maskering
-//uint8_t broadcastAdressModel[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4}; //MAC till den med vit tejp
+uint8_t broadcastAdress[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4}; //MAC till den med vit tejp
 
 int recID = 0;
 int error = 0;
@@ -60,12 +60,17 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&msg_incoming, incomingData, sizeof(msg_incoming));
   recID = msg_incoming.sendID;
-  Serial.print(recID);
-  Serial.print(",");
-  Serial.print(recID);
-  Serial.print(",");
-  Serial.println(recID);
-  
+  Serial.println("thumbIP: " + String(msg_incoming.thumbIP));
+  Serial.println("thumbMCP: " + String(msg_incoming.thumbIP));
+  Serial.println("finger1PIP: " + String(msg_incoming.finger1PIP));
+  Serial.println("finger1MCP: " + String(msg_incoming.finger1MCP));
+  Serial.println("finger2PIP: " + String(msg_incoming.finger2PIP));
+  Serial.println("finger2MCP: " + String(msg_incoming.finger2MCP));
+  Serial.println("finger3PIP: " + String(msg_incoming.finger3PIP));
+  Serial.println("finger3MCP: " + String(msg_incoming.finger3MCP));
+  Serial.println("finger4PIP: " + String(msg_incoming.finger4PIP));
+  Serial.println("finger4MCP: " + String(msg_incoming.finger4MCP));
+  Serial.println();
 }
 
 void getMACAdress(){
@@ -96,7 +101,7 @@ void init_wifi (){
 }
 
 void send (float sendID, float thumbIP, float thumbMCP, float finger1PIP, float finger1MCP, float finger2PIP, float finger2MCP, float finger3PIP, float finger3MCP, float finger4PIP, float finger4MCP){
-  uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8};
+  //uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8};
   msg_to_send.sendID = sendID;
   msg_to_send.thumbIP = thumbIP;
   msg_to_send.thumbMCP = thumbMCP;
