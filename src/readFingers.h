@@ -1,13 +1,18 @@
 #include <Arduino.h>
 #include <ADS1118.h>
 #include <SPI.h>
+#include <MedianFilter.h>
 
 // Defining breakout board, multiplexter
-#define CS 5
+#define CS 17
 ADS1118 ads1118(CS);
 
-// Change these constants according to your project's design
-const float VCC = 3.3;			// voltage at Ardunio 5V line
+// Defining filrer
+#define SAMPLES 20
+MedianFilter<float, SAMPLES> mf;
+
+// Change these constants according to design
+const float VCC = 5;			// voltage
 const float R_DIV = 100000.0;	// resistor used to create a voltage divider
 
 float readResistance(int pin, int type){    // 0<=type<6 -> on esp board, 6=<type<10 -> on multiplexer
@@ -26,6 +31,7 @@ float readResistance(int pin, int type){    // 0<=type<6 -> on esp board, 6=<typ
 
 float getAngle(int pin, int type){
     float angle = readResistance(pin, type) * 2.6716/1000 - 30.2045 - 60; //From Matlab calibration
-    return angle;
+    mf.addSample(angle);
+    return mf.getMedian();
 }
 

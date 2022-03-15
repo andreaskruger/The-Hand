@@ -11,10 +11,10 @@ const int f1PIP_Pin = 32;
 const int f1MCP_Pin = 33;			
 const int f2PIP_Pin = 34;
 const int f2MCP_Pin = 35;
-const int f3PIP_Pin = ads1118.AIN_2;
-const int f3MCP_Pin = ads1118.AIN_3;
-const int f4PIP_Pin = ads1118.AIN_0;
-const int f4MCP_Pin = ads1118.AIN_1;
+const int f3PIP_Pin = ads1118.AIN_0;
+const int f3MCP_Pin = ads1118.AIN_1;
+const int f4PIP_Pin = ads1118.AIN_2;
+const int f4MCP_Pin = ads1118.AIN_3;
 const int pinList[] = {thumbIP_Pin, thumbMCP_Pin, f1PIP_Pin, f1MCP_Pin, f2PIP_Pin, f2MCP_Pin, f3PIP_Pin, f3MCP_Pin, f4PIP_Pin, f4MCP_Pin};
 const int sizeList = sizeof(pinList)/sizeof(int);
 float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
@@ -31,7 +31,7 @@ void initBoard(){
 }
 
 void initAnalogPin(){
-    pinMode(thumbIP_Pin, INPUT);  // change later!
+    pinMode(thumbIP_Pin, INPUT);  // maybe change later!
     pinMode(thumbMCP_Pin, INPUT);
     pinMode(f1PIP_Pin, INPUT);
     pinMode(f1MCP_Pin, INPUT);
@@ -74,25 +74,14 @@ void loop() {
     fingerAngles[i] = readResistance(pinList[i], i);
     Serial.println(String(i) + ": " + String(fingerAngles[i]));
   }
-<<<<<<< HEAD
-=======
-  Serial.println();
-  // Serial.println(String(getAngle(ads1118.AIN_0, 3)));
-
->>>>>>> de77f9514885061b4545c7e60c6282d2ad28d74c
   sendID++;
 
   send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
-<<<<<<< HEAD
   
   sendToModel(o,1.0,1.0);
   o++;
   delay(1000);
 
-=======
-  delay(10);
-  delay(10);
->>>>>>> de77f9514885061b4545c7e60c6282d2ad28d74c
 }
 
 
