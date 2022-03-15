@@ -5,25 +5,23 @@
 #pragma once
 
 #include <Arduino.h>
+#include <ADS1118.h>
 #include "config.h"
 #include "MedianFilter.h"
 
 /*
     Main class
 */
-class flexsensor{
-    // Variables
+class sensor{
 private:
+    // Variables and objects
     int m_pin;
-    String m_location;
+    ADS1118 ads1118(int);
     MedianFilter<float, SAMPLES> m_f;
-
-public:
-    flexsensor(int pin, String location){};
     // Methods
-    // ... Gets
-    float getMedian();
-    String getlocation();
-    // ... Sets
-    void read();
+    float getResistance(int);
+public:
+    sensor(int pin, ADS1118 ads){};
+    // Methods
+    float getAngle();
 };
