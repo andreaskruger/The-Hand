@@ -26,12 +26,12 @@ float readResistance(int pin, int type){    // 0<=type<4 -> on multiplexer, 4=<t
     }
     
     float Rflex = R_DIV * (VCC / Vflex - 1.0);
-    return Rflex;
+    //mf.addSample(Rflex);
+    return Rflex; //mf.getMedian();
 }
 
-float getAngle(int pin, int type){
-    float angle = readResistance(pin, type) * 2.6716/1000 -76; //From Matlab calibration
-    mf.addSample(angle);
-    return mf.getMedian();
+int getAngle(int pin, int type){
+    int angle = readResistance(pin, type) * 2.6716/1000 - 76; //From Matlab calibration
+    return angle;
 }
 
