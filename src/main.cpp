@@ -2,7 +2,7 @@
 #include <readFingers.h>
 #include <talkyBoi.h>
 
-#define interuptPin 17
+#define interuptPin 16
 
 // Pin connected to voltage divider output. used for analogRead to get resistance of the flexsensors
 const int thumbIP_Pin = 36;
@@ -60,17 +60,17 @@ void interuptFunc(){
 void setup() {
   Serial.begin(115200);
   delay(100);
-  getMACAdress();                          //MAC adress är vad som körs för att WIFI ska funkar, den ANDRA bärands MAC adress ska skrivas in i denna koden och tvärtom.
+  getMACAdress();                          //MAC adress is run for the WIFI to work, the OTHER wearers MAC adress shall be written in this code and vice versa.
   init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board 
-  initAnalogPin();                                               
-  // attachInterrupt(17, interuptFunc, HIGH); // interupt för start/stopp knapp
+  initAnalogPin();                         // Initiate analog pins on ESP                      
+  // attachInterrupt(16, interuptFunc, HIGH); // interupt for start/stop button
 }
 
 void loop() {
-  //while(!state){}                                             //Ta bort kommentar för att ha en knapp som låser/öppnar programmet när det körs. Behöver en  debounce för knappen innan det funkar.
+  //while(!state){}                                             //Remove this comment to have a butten that locks/unlocks the program when it is run. Needs a debounce for the button before it works.
 
-  for(int i = 0; i<sizeList; i++){                              //Läser alla sensorer och lägger i en lista
+  for(int i = 0; i<sizeList; i++){                              //Reads all sensors and puts it in a list.
     fingerAngles[i] = readResistance(pinList[i], i);
     Serial.println(String(i) + ": " + String(fingerAngles[i]));
   }
