@@ -60,6 +60,8 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&msg_incoming, incomingData, sizeof(msg_incoming));
   recID = msg_incoming.sendID;
+  // For serial view
+  /*
   Serial.println("thumbIP: " + String(msg_incoming.thumbIP));
   Serial.println("thumbMCP: " + String(msg_incoming.thumbMCP));
   Serial.println("finger1PIP: " + String(msg_incoming.finger1PIP));
@@ -70,6 +72,19 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   Serial.println("finger3MCP: " + String(msg_incoming.finger3MCP));
   Serial.println("finger4PIP: " + String(msg_incoming.finger4PIP));
   Serial.println("finger4MCP: " + String(msg_incoming.finger4MCP));
+  Serial.println();*/
+
+  // For Unity
+  Serial.print(String(msg_incoming.thumbIP));
+  Serial.print("," + String(msg_incoming.thumbMCP));
+  Serial.print("," + String(msg_incoming.finger1PIP));
+  Serial.print("," + String(msg_incoming.finger1MCP));
+  Serial.print("," + String(msg_incoming.finger2PIP));
+  Serial.print("," + String(msg_incoming.finger2MCP));
+  Serial.print("," + String(msg_incoming.finger3PIP));
+  Serial.print("," + String(msg_incoming.finger3MCP));
+  Serial.print("," + String(msg_incoming.finger4PIP));
+  Serial.print("," + String(msg_incoming.finger4MCP));
   Serial.println();
 }
 
