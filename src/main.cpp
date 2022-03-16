@@ -80,7 +80,7 @@ void setup() {
 }
 
 void loop() {
-  //while(!state){}                                             //Remove this comment to have a butten that locks/unlocks the program when it is run. Needs a debounce for the button before it works.
+  while(state){delay(10);}                                             //interupt for pin 16 button
   
   /*for(int i = 0; i<sizeList; i++){                              //Reads all sensors and puts it in a list.
     filters[i].addSample(getAngle(pinList[i], i));
