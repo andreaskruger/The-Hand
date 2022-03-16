@@ -35,7 +35,7 @@ struct_message msg_incoming;
 
 // Callback when data is sent, triggas när något skickas
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-    Serial.print("\r\nLast Packet Send Status:\t");
+    /*Serial.print("\r\nLast Packet Send Status:\t");
     //Serial.write((String)mac_addr));
     Serial.print(mac_addr[0], HEX);
     Serial.print(",");
@@ -53,7 +53,7 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
       error++;
     }else{ 
       succ++;
-    }
+    }*/
 }
 
 // Callback when data is received, triggas när något mottas (används ej)
@@ -61,7 +61,7 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&msg_incoming, incomingData, sizeof(msg_incoming));
   recID = msg_incoming.sendID;
   Serial.println("thumbIP: " + String(msg_incoming.thumbIP));
-  Serial.println("thumbMCP: " + String(msg_incoming.thumbIP));
+  Serial.println("thumbMCP: " + String(msg_incoming.thumbMCP));
   Serial.println("finger1PIP: " + String(msg_incoming.finger1PIP));
   Serial.println("finger1MCP: " + String(msg_incoming.finger1MCP));
   Serial.println("finger2PIP: " + String(msg_incoming.finger2PIP));
@@ -116,12 +116,7 @@ void send (float sendID, float thumbIP, float thumbMCP, float finger1PIP, float 
 
   esp_err_t result = esp_now_send(broadcastAdress, (uint8_t *) &msg_to_send, sizeof(msg_to_send));
 }
-void sendToModel(int sendID, float thumbIP, float thumbMCP){
-  Serial.println("Send to model : ");
-  uint8_t broadcastAdress[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4};
-  msg_to_send.sendID = sendID;
-  esp_err_t result = esp_now_send(broadcastAdress,(uint8_t *) &msg_to_send, sizeof(msg_to_send));
-}
+
 void recieve () {
   
 }
