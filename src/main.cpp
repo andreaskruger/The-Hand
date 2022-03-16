@@ -2,7 +2,7 @@
 #include <readFingers.h>
 #include <talkyBoi.h>
 
-#define interuptPin 17
+#define interuptPin 16
 
 // Pin connected to voltage divider output. used for analogRead to get resistance of the flexsensors
 const uint8_t thumbIP_Pin = ads1118.AIN_1;
@@ -59,11 +59,12 @@ void interuptFunc(){
 void setup() {
   Serial.begin(115200);
   delay(100);
+  pinMode(interuptPin,INPUT_PULLDOWN);
   getMACAdress();                          //MAC adress is run for the WIFI to work, the OTHER wearers MAC adress shall be written in this code and vice versa.
   init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board 
   initAnalogPin();                         // Initiate analog pins on ESP                      
-  //attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
+  attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
 }
 
 void loop() {
