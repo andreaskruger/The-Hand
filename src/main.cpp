@@ -18,6 +18,7 @@ const int f4MCP_Pin = 34;
 const int pinList[] = {thumbIP_Pin, thumbMCP_Pin, f1PIP_Pin, f1MCP_Pin, f2PIP_Pin, f2MCP_Pin, f3PIP_Pin, f3MCP_Pin, f4PIP_Pin, f4MCP_Pin};
 const int sizeList = sizeof(pinList)/sizeof(int);
 float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
+
 int sendID = 0;
 int o = 0;
 
@@ -42,12 +43,10 @@ void initAnalogPin(){
 void interuptFunc(){
   static unsigned long last_interuptTime = 0;
   unsigned long interupt_time = millis();
-  if(interupt_time - last_interuptTime){
-    if (buttonRun){
-      buttonRun = 0;
+  if((interupt_time - last_interuptTime) > 200){
+    if (state){
       state = 0;
     }else{
-      buttonRun = 1;
       state = 1;
     }
   }
@@ -64,12 +63,13 @@ void setup() {
   init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board 
   initAnalogPin();                         // Initiate analog pins on ESP                      
-  attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
+  attachInterrupt(16, interuptFunc, RISING); // interupt for start/stop button
 }
 
 void loop() {
-  //while(!state){}                                             //Remove this comment to have a butten that locks/unlocks the program when it is run. Needs a debounce for the button before it works.
-  
+  while(state){
+    delay(10);
+  }
   for(int i = 0; i<sizeList; i++){                              //Reads all sensors and puts it in a list.
     fingerAngles[i] = getAngle(pinList[i], i);
     Serial.print(String(fingerAngles[i]) + " ");
