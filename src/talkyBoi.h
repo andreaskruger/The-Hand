@@ -3,9 +3,9 @@
 #include <esp_now.h>
 
 //uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE6,0x79,0x9C}; //MAC-adress till den svarta
-//uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8}; //MAC-adress till den silver
+uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8}; //MAC-adress till den silver
 //uint8_t broadcastAdress[] = {0x7C,0x9E,0xBD,0x60,0xD1,0x8C}; //MAC till den med maskering
-uint8_t broadcastAdress[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4}; //MAC till den med vit tejp
+//uint8_t broadcastAdress[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4}; //MAC till den med vit tejp
 
 int recID = 0;
 int error = 0;
