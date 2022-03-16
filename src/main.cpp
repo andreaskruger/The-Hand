@@ -1,20 +1,17 @@
 #include <Arduino.h>
-#include <readFingers.h>
-#include <talkyBoi.h>
-
-#define interuptPin 17
+#include "TalkyBoi.h"
 
 // Pin connected to voltage divider output. used for analogRead to get resistance of the flexsensors
-const int thumbIP_Pin = 36;
-const int thumbMCP_Pin = 39;
-const int f1PIP_Pin = 32;			
-const int f1MCP_Pin = 33;			
-const int f2PIP_Pin = 34;
-const int f2MCP_Pin = 35;
-const int f3PIP_Pin = ads1118.AIN_2;
-const int f3MCP_Pin = ads1118.AIN_3;
-const int f4PIP_Pin = ads1118.AIN_0;
-const int f4MCP_Pin = ads1118.AIN_1;
+const uint8_t thumbIP_Pin = ads1118.AIN_0;
+const uint8_t thumbMCP_Pin = ads1118.AIN_1;
+const uint8_t f1PIP_Pin = ads1118.AIN_2;			
+const uint8_t f1MCP_Pin = ads1118.AIN_3;			
+const int f2PIP_Pin = 36;
+const int f2MCP_Pin = 39;
+const int f3PIP_Pin = 32;
+const int f3MCP_Pin = 33;
+const int f4PIP_Pin = 34;
+const int f4MCP_Pin = 35;
 const int pinList[] = {thumbIP_Pin, thumbMCP_Pin, f1PIP_Pin, f1MCP_Pin, f2PIP_Pin, f2MCP_Pin, f3PIP_Pin, f3MCP_Pin, f4PIP_Pin, f4MCP_Pin};
 const int sizeList = sizeof(pinList)/sizeof(int);
 float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
@@ -24,6 +21,9 @@ int o = 0;
 int buttonRun = 0;
 int state = 0;
 
+/*
+
+*/
 void initBoard(){
     ads1118.begin();    // Initialize board
     ads1118.setSamplingRate(ads1118.RATE_860SPS);   // highest sampling rate possible
@@ -31,13 +31,12 @@ void initBoard(){
 }
 
 void initAnalogPin(){
-    pinMode(thumbIP_Pin, INPUT);  // change later!
-    pinMode(thumbMCP_Pin, INPUT);
-    pinMode(f1PIP_Pin, INPUT);
-    pinMode(f1MCP_Pin, INPUT);
-    pinMode(f2PIP_Pin, INPUT);
-    pinMode(f2MCP_Pin, INPUT);  
-
+  pinMode(f2PIP_Pin, INPUT);  // maybe change later!
+    pinMode(f2MCP_Pin, INPUT); 
+    pinMode(f3PIP_Pin, INPUT);  
+    pinMode(f3MCP_Pin, INPUT);
+    pinMode(f4PIP_Pin, INPUT);
+    pinMode(f4MCP_Pin, INPUT);
 }
 
 void interuptFunc(){
@@ -60,39 +59,29 @@ void interuptFunc(){
 void setup() {
   Serial.begin(115200);
   delay(100);
-  getMACAdress();                          //MAC adress är vad som körs för att WIFI ska funkar, den ANDRA bärands MAC adress ska skrivas in i denna koden och tvärtom.
+  getMACAdress();                          //MAC adress is run for the WIFI to work, the OTHER wearers MAC adress shall be written in this code and vice versa.
   init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board 
-  initAnalogPin();                                               
-  // attachInterrupt(17, interuptFunc, HIGH); // interupt för start/stopp knapp
+  initAnalogPin();                         // Initiate analog pins on ESP                      
+  //attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
 }
 
 void loop() {
-  //while(!state){}                                             //Ta bort kommentar för att ha en knapp som låser/öppnar programmet när det körs. Behöver en  debounce för knappen innan det funkar.
-
-  for(int i = 0; i<sizeList; i++){                              //Läser alla sensorer och lägger i en lista
+  //while(!state){}                                             //Remove this comment to have a butten that locks/unlocks the program when it is run. Needs a debounce for the button before it works.
+  
+  for(int i = 0; i<sizeList; i++){                              //Reads all sensors and puts it in a list.
     fingerAngles[i] = readResistance(pinList[i], i);
-    Serial.println(String(i) + ": " + String(fingerAngles[i]));
+    Serial.print(String(fingerAngles[i]) + " ");
   }
-<<<<<<< HEAD
-=======
+  
   Serial.println();
-  // Serial.println(String(getAngle(ads1118.AIN_0, 3)));
-
->>>>>>> de77f9514885061b4545c7e60c6282d2ad28d74c
+  /*
   sendID++;
 
   send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
-<<<<<<< HEAD
   
-  sendToModel(o,1.0,1.0);
-  o++;
-  delay(1000);
-
-=======
-  delay(10);
-  delay(10);
->>>>>>> de77f9514885061b4545c7e60c6282d2ad28d74c
+  */
+  delay(100);
 }
 
 
