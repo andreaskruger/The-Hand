@@ -9,8 +9,8 @@
 #include "Config.h"
 #include "MedianFilter.h"
 
-/*
-    Main class
+/**
+ * Main class
 */
 class sensor{
 private:

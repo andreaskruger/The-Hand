@@ -16,13 +16,12 @@ const int pinList[] = {thumbIP_Pin, thumbMCP_Pin, f1PIP_Pin, f1MCP_Pin, f2PIP_Pi
 const int sizeList = sizeof(pinList)/sizeof(int);
 float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
 int sendID = 0;
-int o = 0;
 
 int buttonRun = 0;
 int state = 0;
 
-/*
-
+/**
+ * Initiates the ADC breakout board.
 */
 void initBoard(){
     ads1118.begin();    // Initialize board
@@ -30,15 +29,9 @@ void initBoard(){
     ads1118.setFullScaleRange(ads1118.FSR_4096);    // 12 bit
 }
 
-void initAnalogPin(){
-  pinMode(f2PIP_Pin, INPUT);  // maybe change later!
-    pinMode(f2MCP_Pin, INPUT); 
-    pinMode(f3PIP_Pin, INPUT);  
-    pinMode(f3MCP_Pin, INPUT);
-    pinMode(f4PIP_Pin, INPUT);
-    pinMode(f4MCP_Pin, INPUT);
-}
-
+/**
+ * Toggles the state of the microcontroller.
+*/
 void interuptFunc(){
   static unsigned long last_interuptTime = 0;
   unsigned long interupt_time = millis();
@@ -55,31 +48,20 @@ void interuptFunc(){
 }
 
 
-
 void setup() {
   Serial.begin(115200);
   delay(100);
   getMACAdress();                          //MAC adress is run for the WIFI to work, the OTHER wearers MAC adress shall be written in this code and vice versa.
   init_wifi();                             // Initiate ESP_NOW
-  initBoard();                             // Initiate breakout board 
-  initAnalogPin();                         // Initiate analog pins on ESP                      
+  initBoard();                             // Initiate breakout board                  
   //attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
 }
 
 void loop() {
-  //while(!state){}                                             //Remove this comment to have a butten that locks/unlocks the program when it is run. Needs a debounce for the button before it works.
-  
-  for(int i = 0; i<sizeList; i++){                              //Reads all sensors and puts it in a list.
-    fingerAngles[i] = readResistance(pinList[i], i);
-    Serial.print(String(fingerAngles[i]) + " ");
-  }
-  
-  Serial.println();
   /*
   sendID++;
 
   send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
-  
   */
   delay(100);
 }
