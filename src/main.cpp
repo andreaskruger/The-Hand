@@ -5,16 +5,16 @@
 #define interuptPin 17
 
 // Pin connected to voltage divider output. used for analogRead to get resistance of the flexsensors
-const uint8_t thumbIP_Pin = ads1118.AIN_0;
-const uint8_t thumbMCP_Pin = ads1118.AIN_1;
-const uint8_t f1PIP_Pin = ads1118.AIN_2;			
-const uint8_t f1MCP_Pin = ads1118.AIN_3;			
-const int f2PIP_Pin = 36;
-const int f2MCP_Pin = 39;
-const int f3PIP_Pin = 32;
-const int f3MCP_Pin = 33;
-const int f4PIP_Pin = 34;
-const int f4MCP_Pin = 35;
+const uint8_t thumbIP_Pin = ads1118.AIN_1;
+const uint8_t thumbMCP_Pin = ads1118.AIN_0;
+const uint8_t f1PIP_Pin = ads1118.AIN_3;			
+const uint8_t f1MCP_Pin = ads1118.AIN_2;			
+const int f2PIP_Pin = 39;
+const int f2MCP_Pin = 36;
+const int f3PIP_Pin = 33;
+const int f3MCP_Pin = 32;
+const int f4PIP_Pin = 35;
+const int f4MCP_Pin = 34;
 const int pinList[] = {thumbIP_Pin, thumbMCP_Pin, f1PIP_Pin, f1MCP_Pin, f2PIP_Pin, f2MCP_Pin, f3PIP_Pin, f3MCP_Pin, f4PIP_Pin, f4MCP_Pin};
 const int sizeList = sizeof(pinList)/sizeof(int);
 float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
