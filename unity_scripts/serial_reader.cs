@@ -8,10 +8,13 @@ using UnityEngine;
 
 public class serial_reader : MonoBehaviour
 {
+    //static string[] ports = SerialPort.GetPortNames();
+    //static string openPort = ports[0];
+    SerialPort serialStream = new SerialPort("COM6", 115200);
 
-    SerialPort serialStream = new SerialPort("COM5", 115200);
     //public static int[] angles = {0, 0, 0};
     public static int[] angles = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
     /// <summary>
     /// Parses the serial stream into three integer values for the angles.
     /// Returns an array of three integers.
@@ -19,40 +22,38 @@ public class serial_reader : MonoBehaviour
     /// <param name="msg"></param>
     /// <returns></returns>
     int[] parseSerial(string msg)
-    {   
-        
-       string[] splitMsg = msg.Split(',');
-        /*
-         int i = 0;
-         int[] parsedMsg = new int[10];
-         while (i < splitMsg.Length)
-         {
-             if (splitMsg[i] == "inf")
-             {
-                 splitMsg[i] = "0";
-             }
-             parsedMsg[i] = int.Parse(splitMsg[i]);
-             i++;
-         }
-         */
-        int[] parsedMsg = { int.Parse(splitMsg[0]), int.Parse(splitMsg[1]), int.Parse(splitMsg[2]), int.Parse(splitMsg[3]), int.Parse(splitMsg[4]), int.Parse(splitMsg[5]),int.Parse(splitMsg[6]), int.Parse(splitMsg[7]), int.Parse(splitMsg[8]), int.Parse(splitMsg[9])};
+    {
+        string[] splitMsg = msg.Split(',');
+        int[] parsedMsg = new int[10];
+
+        for (int i = 0; i < splitMsg.Length; i++)
+        {
+            parsedMsg[i] = (int)float.Parse(splitMsg[i]);
+        }
+
         return parsedMsg;
     }
 
 
     void Start()
-    {
+    {   
         serialStream.Open();
     }
-
     
     void Update()
     {
         // Read and parse serial input
+        //Debug.Log(serial_reader.openPort);
+        if (serialStream.IsOpen)
+        {
+            angles = parseSerial(serialStream.ReadLine());
+        }
+        
+        Debug.Log(angles[0]);
+    }
 
-        //angle = float.Parse(serialStream.ReadLine());
-        //angles = parseSerial(serialStream.ReadLine());
-  
-
+    void OnApplicationQuit()
+    {
+        serialStream.Close();
     }
 }

@@ -81,7 +81,7 @@ void loop() {
 
   send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
   
-  delay(500);
+  delay(10);
 }
 
 
