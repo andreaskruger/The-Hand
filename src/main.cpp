@@ -25,6 +25,19 @@ int o = 0;
 int buttonRun = 0;
 int state = 0;
 
+const int SAMPLE_WINDOW = 10;
+
+MedianFilter<int, SAMPLE_WINDOW> mf_thumbIP;
+MedianFilter<int, SAMPLE_WINDOW> mf_thumbMCP;
+MedianFilter<int, SAMPLE_WINDOW> mf_f1PIP;			
+MedianFilter<int, SAMPLE_WINDOW> mf_f1MCP;			
+MedianFilter<int, SAMPLE_WINDOW> mf_f2PIP;
+MedianFilter<int, SAMPLE_WINDOW> mf_f2MCP;
+MedianFilter<int, SAMPLE_WINDOW> mf_f3PIP;
+MedianFilter<int, SAMPLE_WINDOW> mf_f3MCP;
+MedianFilter<int, SAMPLE_WINDOW> mf_f4PIP;
+MedianFilter<int, SAMPLE_WINDOW> mf_f4MCP;
+
 void initBoard(){
     ads1118.begin();    // Initialize board
     ads1118.setSamplingRate(ads1118.RATE_860SPS);   // highest sampling rate possible
@@ -67,20 +80,29 @@ void setup() {
 }
 
 void loop() {
-  while(state){
-    delay(10);
-  }
-  for(int i = 0; i<sizeList; i++){                              //Reads all sensors and puts it in a list.
-    fingerAngles[i] = getAngle(pinList[i], i);
+  //while(!state){}                                             //Remove this comment to have a butten that locks/unlocks the program when it is run. Needs a debounce for the button before it works.
+  
+  /*for(int i = 0; i<sizeList; i++){                              //Reads all sensors and puts it in a list.
+    filters[i].addSample(getAngle(pinList[i], i));
     Serial.print(String(fingerAngles[i]) + " ");
-  }
+  }*/
+  mf_thumbIP.addSample(getAngle(pinList[0], 0));
+  mf_thumbMCP.addSample(getAngle(pinList[1], 1));;
+  mf_f1PIP.addSample(getAngle(pinList[2], 2));;			
+  mf_f1MCP.addSample(getAngle(pinList[3], 3));;			
+  mf_f2PIP.addSample(getAngle(pinList[4], 4));;
+  mf_f2MCP.addSample(getAngle(pinList[5], 5));;
+  mf_f3PIP.addSample(getAngle(pinList[6], 6));;
+  mf_f3MCP.addSample(getAngle(pinList[7], 7));;
+  mf_f4PIP.addSample(getAngle(pinList[8], 8));;
+  mf_f4MCP.addSample(getAngle(pinList[9], 9));;
   
   Serial.println();
   
   sendID++;
 
-  send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
-  
+  send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2PIP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
+
   delay(10);
 }
 
