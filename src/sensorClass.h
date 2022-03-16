@@ -1,12 +1,12 @@
-/*
-    This class file is used to create flex sensor objects that handle all reading
-    and filtering of each sensor signal.
+/**
+ * This class file is used to create flex sensor objects that handle all reading
+ * and filtering of each sensor signal.
 */
 #pragma once
 
 #include <Arduino.h>
 #include <ADS1118.h>
-#include "config.h"
+#include "Config.h"
 #include "MedianFilter.h"
 
 /*
@@ -17,6 +17,7 @@ private:
     // Variables and objects
     int m_pin;
     ADS1118 ads1118(int);
+    // Number of samples are defined in config.h
     MedianFilter<float, SAMPLES> m_f;
     // Methods
     float getResistance(int);

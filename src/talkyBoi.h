@@ -1,7 +1,12 @@
+/**
+ *   
+ */
+#pragma once
+
 #include <Arduino.h>
 #include <WiFi.h>
 #include <esp_now.h>
-#include "config.h"
+#include "Config.h"
 
 //uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE6,0x79,0x9C}; //MAC-adress till den svarta
 uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8}; //MAC-adress till den silver
