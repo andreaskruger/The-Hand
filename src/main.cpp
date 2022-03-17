@@ -24,8 +24,11 @@ int sendID = 0;
 int setupState = 0;
 int state = 0;
 
+// Number of samples for the median filter.
+// More samples => larger delay
 const int SAMPLE_WINDOW = 10;
 
+// filter objects for all joints
 MedianFilter<int, SAMPLE_WINDOW> mf_thumbIP;
 MedianFilter<int, SAMPLE_WINDOW> mf_thumbMCP;
 MedianFilter<int, SAMPLE_WINDOW> mf_f1PIP;			
@@ -38,12 +41,14 @@ MedianFilter<int, SAMPLE_WINDOW> mf_f4PIP;
 MedianFilter<int, SAMPLE_WINDOW> mf_f4MCP;
 MedianFilter<int, SAMPLE_WINDOW> calibrateFilter;
 
+// Initiate the breakout board
 void initBoard(){
     ads1118.begin();    // Initialize board
     ads1118.setSamplingRate(ads1118.RATE_860SPS);   // highest sampling rate possible
     ads1118.setFullScaleRange(ads1118.FSR_4096);    // 12 bit
 }
 
+// Initiate the pins that 
 void initAnalogPin(){
   pinMode(f2PIP_Pin, INPUT);  // maybe change later!
     pinMode(f2MCP_Pin, INPUT); 
@@ -53,7 +58,9 @@ void initAnalogPin(){
     pinMode(f4MCP_Pin, INPUT);
 }
 
-
+/**
+ * Interupt function for the initial calibration.
+*/
 void interuptCalibrate(){
     static unsigned long last_interuptTime = 0;
   unsigned long interupt_time = millis();
@@ -61,8 +68,11 @@ void interuptCalibrate(){
     setupState++;
   }
   last_interuptTime = interupt_time;
-
 }
+
+/**
+ * Interupt function for pausing the sampling during runtime.
+*/
 void interuptFunc(){
   static unsigned long last_interuptTime = 0;
   unsigned long interupt_time = millis();
@@ -76,6 +86,9 @@ void interuptFunc(){
   last_interuptTime = interupt_time;
 }
 
+/**
+ * Helper function for printing all current joint values.
+*/
 void printAllValues(){
   Serial.print(mf_thumbIP.getMedian() + ", ");
   Serial.print(mf_thumbMCP.getMedian() + ", ");
@@ -97,28 +110,38 @@ void setup() {
   init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board 
   initAnalogPin();                         // Initiate analog pins on ESP 
+
   Serial.println("Wating for calibration...");
   attachInterrupt(16,interuptCalibrate,RISING); //Interupt for calibration, start with open hand
   while(setupState<1){delay(10);}               //Hold hand open to calibrate flexsensors for an open hand
   for (int i = 0; i < sizeList; i++){
-      for (int j = 0; j <= SAMPLE_WINDOW; j++){
+      for (int j = 0; j <= 2*SAMPLE_WINDOW; j++){
         delay(10);
         int res = readResistance(pinList[i],i);
         calibrateFilter.addSample(res);
+        Serial.print(res);
+        Serial.print(" ");
+        Serial.println(calibrateFilter.getMedian());
       }
       calibrate(calibrateFilter.getMedian(), i, 1);           //Located in readFingers, takes a pin, type(breakoutboard or ESP), pos which is the position in 
   }                                                             //calibrate array and state(open 1 and closed 2)
   Serial.println("Calibrate 1: done");
+
   while(setupState<2){delay(10);}
   for (int i = 0; i < sizeList; i++){
-      for (int j = 0; j <= SAMPLE_WINDOW; j++){
+      for (int j = 0; j <= 2*SAMPLE_WINDOW; j++){
         delay(10);
         int res = readResistance(pinList[i],i);
         calibrateFilter.addSample(res);
+        Serial.print(res);
+        Serial.print(" ");
+        Serial.println(calibrateFilter.getMedian());
       }
       calibrate(calibrateFilter.getMedian(), i, 2);           //Located in readFingers, takes a pin, type(breakoutboard or ESP), pos which is the position in                                                               
   }                                                             //calibrate array and state(open 1 and closed 2)
+
   Serial.println("Calibrate 2: done");
+  delay(5000);
   Serial.print("Calibrating");
   Serial.print(". ");
   delay(300);
@@ -157,12 +180,10 @@ void loop() {
  
   //printAllValues();
   //printCalibrationValues();
-  for (int i = 0; i < sizeList; i++)
-  {
-    Serial.print("Angle: " + i);
-    Serial.print(": ");
-    getAngle(pinList[i],i,i);
+  for(int i = 0; i < 10; i++){
+    getAngle(pinList[i], i, i);
   }
+
   delay(1000);
 }
 
