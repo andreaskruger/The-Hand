@@ -20,9 +20,8 @@ const int sizeList = sizeof(pinList)/sizeof(int);
 float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
 
 int sendID = 0;
-int o = 0;
 
-int buttonRun = 0;
+int setupState = 0;
 int state = 0;
 
 const int SAMPLE_WINDOW = 10;
@@ -37,6 +36,7 @@ MedianFilter<int, SAMPLE_WINDOW> mf_f3PIP;
 MedianFilter<int, SAMPLE_WINDOW> mf_f3MCP;
 MedianFilter<int, SAMPLE_WINDOW> mf_f4PIP;
 MedianFilter<int, SAMPLE_WINDOW> mf_f4MCP;
+MedianFilter<int, SAMPLE_WINDOW> calibrateFilter;
 
 void initBoard(){
     ads1118.begin();    // Initialize board
@@ -53,6 +53,16 @@ void initAnalogPin(){
     pinMode(f4MCP_Pin, INPUT);
 }
 
+
+void interuptCalibrate(){
+    static unsigned long last_interuptTime = 0;
+  unsigned long interupt_time = millis();
+  if((interupt_time - last_interuptTime) > 200){
+    setupState++;
+  }
+  last_interuptTime = interupt_time;
+
+}
 void interuptFunc(){
   static unsigned long last_interuptTime = 0;
   unsigned long interupt_time = millis();
@@ -66,7 +76,18 @@ void interuptFunc(){
   last_interuptTime = interupt_time;
 }
 
-
+void printAllValues(){
+  Serial.print(mf_thumbIP.getMedian() + ", ");
+  Serial.print(mf_thumbMCP.getMedian() + ", ");
+  Serial.print(mf_f1PIP.getMedian() + ", ");
+  Serial.print(mf_f1MCP.getMedian() + ", ");
+  Serial.print(mf_f2PIP.getMedian() + ", ");
+  Serial.print(mf_f2MCP.getMedian() + ", ");
+  Serial.print(mf_f3PIP.getMedian() + ", ");
+  Serial.print(mf_f3MCP.getMedian() + ", ");
+  Serial.print(mf_f4PIP.getMedian() + ", ");
+  Serial.println(mf_f4MCP.getMedian());
+}
 
 void setup() {
   Serial.begin(115200);
@@ -75,7 +96,39 @@ void setup() {
   getMACAdress();                          //MAC adress is run for the WIFI to work, the OTHER wearers MAC adress shall be written in this code and vice versa.
   init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board 
-  initAnalogPin();                         // Initiate analog pins on ESP                      
+  initAnalogPin();                         // Initiate analog pins on ESP 
+  Serial.println("Wating for calibration...");
+  attachInterrupt(16,interuptCalibrate,RISING); //Interupt for calibration, start with open hand
+  while(setupState<1){delay(10);}               //Hold hand open to calibrate flexsensors for an open hand
+  for (int i = 0; i < sizeList; i++){
+      for (int j = 0; j <= SAMPLE_WINDOW; j++){
+        delay(10);
+        int res = readResistance(pinList[i],i);
+        calibrateFilter.addSample(res);
+      }
+      calibrate(calibrateFilter.getMedian(), i, 1);           //Located in readFingers, takes a pin, type(breakoutboard or ESP), pos which is the position in 
+  }                                                             //calibrate array and state(open 1 and closed 2)
+  Serial.println("Calibrate 1: done");
+  while(setupState<2){delay(10);}
+  for (int i = 0; i < sizeList; i++){
+      for (int j = 0; j <= SAMPLE_WINDOW; j++){
+        delay(10);
+        int res = readResistance(pinList[i],i);
+        calibrateFilter.addSample(res);
+      }
+      calibrate(calibrateFilter.getMedian(), i, 2);           //Located in readFingers, takes a pin, type(breakoutboard or ESP), pos which is the position in                                                               
+  }                                                             //calibrate array and state(open 1 and closed 2)
+  Serial.println("Calibrate 2: done");
+  Serial.print("Calibrating");
+  Serial.print(". ");
+  delay(300);
+  Serial.print(". ");
+  delay(300);
+  Serial.println(". ");
+  delay(300);
+  Serial.println("Calibration done!");
+  detachInterrupt(16);
+  delay(10);
   attachInterrupt(16, interuptFunc, RISING); // interupt for start/stop button
 }
 
@@ -85,7 +138,7 @@ void loop() {
   /*for(int i = 0; i<sizeList; i++){                              //Reads all sensors and puts it in a list.
     filters[i].addSample(getAngle(pinList[i], i));
     Serial.print(String(fingerAngles[i]) + " ");
-  }*/
+  }*//*
   mf_thumbIP.addSample(getAngle(pinList[0], 0));
   mf_thumbMCP.addSample(getAngle(pinList[1], 1));;
   mf_f1PIP.addSample(getAngle(pinList[2], 2));;			
@@ -96,14 +149,21 @@ void loop() {
   mf_f3MCP.addSample(getAngle(pinList[7], 7));;
   mf_f4PIP.addSample(getAngle(pinList[8], 8));;
   mf_f4MCP.addSample(getAngle(pinList[9], 9));;
-  
-  Serial.println();
+  */
   
   sendID++;
 
-  send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2PIP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
-
-  delay(10);
+  //send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2PIP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
+ 
+  //printAllValues();
+  //printCalibrationValues();
+  for (int i = 0; i < sizeList; i++)
+  {
+    Serial.print("Angle: " + i);
+    Serial.print(": ");
+    getAngle(pinList[i],i,i);
+  }
+  delay(1000);
 }
 
 
