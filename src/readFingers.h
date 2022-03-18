@@ -53,11 +53,10 @@ float readResistance(int pin, int type){    // 0<=type<4 -> on multiplexer, 4=<t
 int getAngle(int pin, int type, int pos){
     int angle = readResistance(pin, type); 
     angle = map(angle,calibrateOpen[pos],calibrateClosed[pos],0,90);
-    Serial.println(angle);
     return angle;
 }
 void calibrate(int calibratedValue, int pos, int state){
-    Serial.println("Value: " + calibratedValue);
+    //Serial.println("Value: " + calibratedValue);
     if(state == 1){
         calibrateOpen[pos] = calibratedValue;
     }else if(state == 2){

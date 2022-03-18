@@ -15,7 +15,7 @@ const int f3PIP_Pin = 33;
 const int f3MCP_Pin = 32;
 const int f4PIP_Pin = 35;
 const int f4MCP_Pin = 34;
-const int pinList[] = {thumbIP_Pin, thumbMCP_Pin, f1PIP_Pin, f1MCP_Pin, f2PIP_Pin, f2MCP_Pin, f3PIP_Pin, f3MCP_Pin, f4PIP_Pin, f4MCP_Pin};
+const int pinList[] = {thumbMCP_Pin, thumbIP_Pin, f1MCP_Pin, f1PIP_Pin, f2MCP_Pin, f2PIP_Pin, f3MCP_Pin, f3PIP_Pin, f4MCP_Pin, f4PIP_Pin};
 const int sizeList = sizeof(pinList)/sizeof(int);
 float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
 
@@ -119,9 +119,9 @@ void setup() {
         delay(10);
         int res = readResistance(pinList[i],i);
         calibrateFilter.addSample(res);
-        Serial.print(res);
-        Serial.print(" ");
-        Serial.println(calibrateFilter.getMedian());
+        //Serial.print(res);
+        //Serial.print(" ");
+        //Serial.println(calibrateFilter.getMedian());
       }
       calibrate(calibrateFilter.getMedian(), i, 1);           //Located in readFingers, takes a pin, type(breakoutboard or ESP), pos which is the position in 
   }                                                             //calibrate array and state(open 1 and closed 2)
@@ -133,15 +133,15 @@ void setup() {
         delay(10);
         int res = readResistance(pinList[i],i);
         calibrateFilter.addSample(res);
-        Serial.print(res);
-        Serial.print(" ");
-        Serial.println(calibrateFilter.getMedian());
+        //Serial.print(res);
+        //Serial.print(" ");
+        //Serial.println(calibrateFilter.getMedian());
       }
       calibrate(calibrateFilter.getMedian(), i, 2);           //Located in readFingers, takes a pin, type(breakoutboard or ESP), pos which is the position in                                                               
   }                                                             //calibrate array and state(open 1 and closed 2)
 
   Serial.println("Calibrate 2: done");
-  delay(5000);
+  //delay(5000);
   Serial.print("Calibrating");
   Serial.print(". ");
   delay(300);
@@ -170,14 +170,32 @@ void loop() {
   mf_f4MCP.addSample(getAngle(pinList[9], 9, 9));;
   
   
-  //sendID++;
+  sendID++;
 
-  //send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2PIP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
- 
-  printAllValues();
-  
+  send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2PIP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
+ /*
+  Serial.print(mf_thumbIP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_thumbMCP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f1PIP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f1MCP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f2PIP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f2MCP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f3PIP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f3MCP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f4PIP.getMedian());
+  Serial.print(" ");
+  Serial.println(mf_f4MCP.getMedian());
+  */
 
-  delay(1000);
+  delay(10);
 }
 
 
