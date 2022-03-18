@@ -90,15 +90,15 @@ void interuptFunc(){
  * Helper function for printing all current joint values.
 */
 void printAllValues(){
-  Serial.print(mf_thumbIP.getMedian() + ", ");
-  Serial.print(mf_thumbMCP.getMedian() + ", ");
-  Serial.print(mf_f1PIP.getMedian() + ", ");
-  Serial.print(mf_f1MCP.getMedian() + ", ");
-  Serial.print(mf_f2PIP.getMedian() + ", ");
-  Serial.print(mf_f2MCP.getMedian() + ", ");
-  Serial.print(mf_f3PIP.getMedian() + ", ");
-  Serial.print(mf_f3MCP.getMedian() + ", ");
-  Serial.print(mf_f4PIP.getMedian() + ", ");
+  Serial.print(mf_thumbIP.getMedian() + " ");
+  Serial.print(mf_thumbMCP.getMedian() + " ");
+  Serial.print(mf_f1PIP.getMedian() + " ");
+  Serial.print(mf_f1MCP.getMedian() + " ");
+  Serial.print(mf_f2PIP.getMedian() + " ");
+  Serial.print(mf_f2MCP.getMedian() + " ");
+  Serial.print(mf_f3PIP.getMedian() + " ");
+  Serial.print(mf_f3MCP.getMedian() + " ");
+  Serial.print(mf_f4PIP.getMedian() + " ");
   Serial.println(mf_f4MCP.getMedian());
 }
 
@@ -157,32 +157,25 @@ void setup() {
 
 void loop() {
   while(state){delay(10);}                                             //interupt for pin 16 button
+
+  mf_thumbIP.addSample(getAngle(pinList[0], 0, 0));
+  mf_thumbMCP.addSample(getAngle(pinList[1], 1, 1));;
+  mf_f1PIP.addSample(getAngle(pinList[2], 2, 2));;			
+  mf_f1MCP.addSample(getAngle(pinList[3], 3, 3));;			
+  mf_f2PIP.addSample(getAngle(pinList[4], 4, 4));;
+  mf_f2MCP.addSample(getAngle(pinList[5], 5, 5));;
+  mf_f3PIP.addSample(getAngle(pinList[6], 6, 6));;
+  mf_f3MCP.addSample(getAngle(pinList[7], 7, 7));;
+  mf_f4PIP.addSample(getAngle(pinList[8], 8, 8));;
+  mf_f4MCP.addSample(getAngle(pinList[9], 9, 9));;
   
-  /*for(int i = 0; i<sizeList; i++){                              //Reads all sensors and puts it in a list.
-    filters[i].addSample(getAngle(pinList[i], i));
-    Serial.print(String(fingerAngles[i]) + " ");
-  }*//*
-  mf_thumbIP.addSample(getAngle(pinList[0], 0));
-  mf_thumbMCP.addSample(getAngle(pinList[1], 1));;
-  mf_f1PIP.addSample(getAngle(pinList[2], 2));;			
-  mf_f1MCP.addSample(getAngle(pinList[3], 3));;			
-  mf_f2PIP.addSample(getAngle(pinList[4], 4));;
-  mf_f2MCP.addSample(getAngle(pinList[5], 5));;
-  mf_f3PIP.addSample(getAngle(pinList[6], 6));;
-  mf_f3MCP.addSample(getAngle(pinList[7], 7));;
-  mf_f4PIP.addSample(getAngle(pinList[8], 8));;
-  mf_f4MCP.addSample(getAngle(pinList[9], 9));;
-  */
   
-  sendID++;
+  //sendID++;
 
   //send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2PIP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
  
-  //printAllValues();
-  //printCalibrationValues();
-  for(int i = 0; i < 10; i++){
-    getAngle(pinList[i], i, i);
-  }
+  printAllValues();
+  
 
   delay(1000);
 }
