@@ -15,7 +15,7 @@ const int f3PIP_Pin = 33;
 const int f3MCP_Pin = 32;
 const int f4PIP_Pin = 35;
 const int f4MCP_Pin = 34;
-const int pinList[] = {thumbMCP_Pin, thumbIP_Pin, f1MCP_Pin, f1PIP_Pin, f2MCP_Pin, f2PIP_Pin, f3MCP_Pin, f3PIP_Pin, f4MCP_Pin, f4PIP_Pin};
+const int pinList[] = {thumbIP_Pin, thumbMCP_Pin, f1PIP_Pin, f1MCP_Pin, f2PIP_Pin, f2MCP_Pin, f3PIP_Pin, f3MCP_Pin, f4PIP_Pin, f4MCP_Pin};
 const int sizeList = sizeof(pinList)/sizeof(int);
 float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
 
@@ -26,7 +26,7 @@ int state = 0;
 
 // Number of samples for the median filter.
 // More samples => larger delay
-const int SAMPLE_WINDOW = 10;
+const int SAMPLE_WINDOW = 7;
 
 // filter objects for all joints
 MedianFilter<int, SAMPLE_WINDOW> mf_thumbIP;
@@ -164,7 +164,7 @@ void loop() {
   mf_f1MCP.addSample(getAngle(pinList[3], 3, 3));;			
   mf_f2PIP.addSample(getAngle(pinList[4], 4, 4));;
   mf_f2MCP.addSample(getAngle(pinList[5], 5, 5));;
-  mf_f3PIP.addSample(getAngle(pinList[6], 6, 6));;
+  mf_f3PIP.addSample(getAngle(pinList[6], 6, 6));
   mf_f3MCP.addSample(getAngle(pinList[7], 7, 7));;
   mf_f4PIP.addSample(getAngle(pinList[8], 8, 8));;
   mf_f4MCP.addSample(getAngle(pinList[9], 9, 9));;
@@ -172,7 +172,9 @@ void loop() {
   
   sendID++;
 
-  send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2PIP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
+  send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2MCP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
+  //send(sendID, getAngle(pinList[0],0,0),getAngle(pinList[1],1,1),getAngle(pinList[2],2,2),getAngle(pinList[3],3,3),getAngle(pinList[4],4,4),getAngle(pinList[5],5,5),getAngle(pinList[6],6,6),getAngle(pinList[7],7,7),getAngle(pinList[8],8,8),getAngle(pinList[9],9,9));
+ 
  /*
   Serial.print(mf_thumbIP.getMedian());
   Serial.print(" ");
@@ -195,7 +197,7 @@ void loop() {
   Serial.println(mf_f4MCP.getMedian());
   */
 
-  delay(10);
+  delay(16);
 }
 
 
