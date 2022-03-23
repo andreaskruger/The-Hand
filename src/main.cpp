@@ -5,8 +5,8 @@
 #define interuptPin 16
 
 // Pin connected to voltage divider output. used for analogRead to get resistance of the flexsensors
-const uint8_t thumbIP_Pin = ads1118.AIN_1;
-const uint8_t thumbMCP_Pin = ads1118.AIN_0;
+const uint8_t thumbIP_Pin = ads1118.AIN_0;
+const uint8_t thumbMCP_Pin = ads1118.AIN_1;
 const uint8_t f1PIP_Pin = ads1118.AIN_3;			
 const uint8_t f1MCP_Pin = ads1118.AIN_2;			
 const int f2PIP_Pin = 39;
