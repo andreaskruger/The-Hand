@@ -39,14 +39,12 @@ void initBoard2(){
 */
 
 void initBoard(){
-  
-
   pinMode(s0, OUTPUT);
   pinMode(s1, OUTPUT);
   pinMode(s2, OUTPUT);
   pinMode(s3, OUTPUT);
 
-  digitalWrite(s0, LOW);
+  digitalWrite(s0, HIGH);
   digitalWrite(s1, LOW);
   digitalWrite(s2, LOW);
   digitalWrite(s3, LOW);
@@ -122,10 +120,10 @@ void loop() {
 
   send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
   */
-  int val1 = readMux(0);
+  //int val1 = readMux(0);
   int val2 = readMux(1);
-  Serial.print("val 1: ");
-  Serial.println(val1);
+  //Serial.print("val 1: ");
+  //Serial.println(val1);
   Serial.print("val 2: ");
   Serial.println(val2);
   
