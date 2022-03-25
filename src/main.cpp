@@ -3,11 +3,14 @@
 #include "TalkyBoi.h"
 
 // Pin connected to voltage divider output. used for analogRead to get resistance of the flexsensors
-const int s0 = 36;
-const int s1 = 39;
-const int s2 = 32;
-const int s3 = 33;
+const int s0 = 25;
+const int s1 = 26;
+const int s2 = 27;
+const int s3 = 14;
 const int SIG_pin = 34;
+
+
+
 /*
 const uint8_t thumbIP_Pin = ads1118.AIN_0;
 const uint8_t thumbMCP_Pin =  ads1118.AIN_1;
@@ -44,7 +47,7 @@ void initBoard(){
   pinMode(s2, OUTPUT);
   pinMode(s3, OUTPUT);
 
-  digitalWrite(s0, HIGH);
+  digitalWrite(s0, LOW);
   digitalWrite(s1, LOW);
   digitalWrite(s2, LOW);
   digitalWrite(s3, LOW);
@@ -120,11 +123,11 @@ void loop() {
 
   send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
   */
-  //int val1 = readMux(0);
+  int val1 = readMux(0);
   int val2 = readMux(1);
-  //Serial.print("val 1: ");
-  //Serial.println(val1);
-  Serial.print("val 2: ");
+  Serial.print("val 1: ");
+  Serial.print(val1);
+  Serial.print(" val 2: ");
   Serial.println(val2);
   
   delay(250);
