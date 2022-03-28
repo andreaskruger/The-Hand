@@ -1,13 +1,7 @@
 #include <Arduino.h>
 #include <ADS1118.h>
 #include "TalkyBoi.h"
-
-// Pin connected to voltage divider output. used for analogRead to get resistance of the flexsensors
-const int s0 = 25;
-const int s1 = 26;
-const int s2 = 27;
-const int s3 = 14;
-const int SIG_pin = 34;
+#include "config.h"
 
 
 
@@ -81,7 +75,7 @@ int readMux(int channel){
   }
 
   //read the value at the SIG pin
-  int val = analogRead(SIG_pin);
+  int val = analogRead(SIG_PIN);
 
   //return the value
   return val;

@@ -23,9 +23,11 @@ private:
     MedianFilter<float, SAMPLES> m_f;
     // Methods
     float getResistance(int);
+    int readMux(int);
 public:
     flexSensor(int pin, int minimum_angle, int maximum_angle){};
     // Methods
+    int getValue();
     float getAngle();
-    void calibrate(int calibratedValue, int state);
+    void calibrate(int state);
 };

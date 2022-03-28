@@ -6,6 +6,11 @@
 
 // Connection for CS pin on ADC breakout board
 #define CS_PIN 17 
+#define SIG_PIN 34
+#define s0  25
+#define s1  26
+#define s2  27
+#define s3  14
 
 // Change these constants according to your project's design
 const float VCC = 5;			// Voltage that the sensors are connected to
