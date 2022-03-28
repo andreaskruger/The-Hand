@@ -11,8 +11,8 @@ Arduino_GFX *gfx = new Arduino_ST7789(bus, 7 /* RST */, 0 /* rotation */, true /
 
 void disp_initialize(){
     // Screen setup
-    pinMode(32, OUTPUT);
-    pinMode(33, OUTPUT);
+    pinMode(DISP_RES, OUTPUT);
+    pinMode(DISP_DC, OUTPUT);
     digitalWrite(32, HIGH);         // Keep reset pin high
     digitalWrite(33, HIGH);          // Set data mode to "Command"
     gfx->begin();                   // Start the screen object
@@ -22,4 +22,31 @@ void disp_initialize(){
     gfx->setTextColor(RED);         // Set color
     gfx->println("Hello world!");
     delay(1000);
+
+    gfx->println("bababooba");
+}
+
+// Clear screen and reset cursor
+void disp_clr(){
+    gfx->fillScreen(BLACK);         // "Clear" the screen
+    gfx->setCursor(5, 15);          // Set print pointer to top left corner
+}
+
+// print line of text on screen
+void disp_println(String string){   
+    gfx->println(string);
+}
+
+// print text on screen
+void disp_print(String string){     
+    gfx->print(string);
+}
+
+// Set cursor location on screen
+void disp_setCursor(int16_t x, int16_t y){
+    gfx->setCursor(x,y);
+}
+
+void disp_setTextColor(int16_t COLOR){
+    gfx->setTextColor(COLOR);
 }
