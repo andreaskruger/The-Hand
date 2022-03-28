@@ -17,6 +17,8 @@ private:
     int m_pin;
     int min_angle;
     int max_angle;
+    int calibrateOpen;
+    int calibrateClosed;
     // Number of samples are defined in config.h
     MedianFilter<float, SAMPLES> m_f;
     // Methods
@@ -25,4 +27,5 @@ public:
     flexSensor(int pin, int minimum_angle, int maximum_angle){};
     // Methods
     float getAngle();
+    void calibrate(int calibratedValue, int state);
 };

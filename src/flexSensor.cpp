@@ -28,8 +28,7 @@ flexSensor::flexSensor(int pin, int minimum_angle, int maximum_angle){
 */
 
 float flexSensor::getAngle(){
-    float angle = getResistance(m_pin) * 2.6716/1000 - 30.2045 - 60; //From Matlab calibration
-
+    float angle = map(angle,calibrateOpen,calibrateClosed,min_angle,max_angle);
     m_f.addSample(angle);
 
     return m_f.getMedian();
@@ -43,13 +42,12 @@ float flexSensor::getAngle(){
  * @return a float with the resistance of the flex sensor.
 */
 
-float flexSensor::getResistance(int pin){ 
-    float Vflex;
 
-    //Vflex = ads1118.getMilliVolts(pin) / 1000.0;
-    
-    float Rflex = R_DIV * (VCC / Vflex - 1.0);
-    return Rflex;
+void flexSensor::calibrate(int calibratedValue, int state){
+    if(state == 1){
+        calibrateOpen = calibratedValue;
+    }
+    if(state == 2){
+        calibrateClosed = calibratedValue;
+    }
 }
-
-
