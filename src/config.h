@@ -4,8 +4,7 @@
 */
 #pragma once
 
-// Connection for CS pin on ADC breakout board
-#define CS_PIN 17 
+// Connection for pins on multiplexer
 #define SIG_PIN 34
 #define s0  25
 #define s1  26

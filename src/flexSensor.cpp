@@ -11,17 +11,18 @@
 
 /**
  * Constructor
- * @param pin the pin to which the flex sensor is connected to.
- * @param ads the ADC breakout board object which the flexsensor is connected to.
+ * @param channel the channel to which the flex sensor is connected to.
+ * @param minimum_angle the minimum angle of flex sensor.
+ * @param maximum_angle the maximum angle of flex sensor.
 */
 
-flexSensor::flexSensor(int pin, int minimum_angle, int maximum_angle){
-    m_pin = pin;
+flexSensor::flexSensor(int channel, int minimum_angle, int maximum_angle){
+    m_channel = channel;
     min_angle = minimum_angle;
     max_angle = maximum_angle;
 }
 
-
+// Changes multiplexer to read from int channel and then returns the read value
 int flexSensor::readMux(int channel){
   int controlPin[] = {s0, s1, s2, s3};
 
@@ -56,35 +57,28 @@ int flexSensor::readMux(int channel){
   return val;
 }
 
+int flexSensor::getValue(){
+    return readMux(m_channel);
+}
+
 
 /**
  * Performs a measurement of the sensor and adds it to the median filter.
  * @return a float with the median angle value.
 */
-
-int flexSensor::getValue(){
-    return readMux(m_pin);
-}
-
 float flexSensor::getAngle(){
-    float angle = map(readMux(m_pin),calibrateOpen,calibrateClosed,calibrateOpen,calibrateClosed);
+    float angle = map(readMux(m_channel),calibrateOpen,calibrateClosed,min_angle,max_angle);
     m_f.addSample(angle);
     return m_f.getMedian();
 }
 
 
-/**
- * Helper method for getAngle().
- * Takes a reading at the voltage divider and returns a resistance.
- * @param pin the pin to take a reading from.
- * @return a float with the resistance of the flex sensor.
-*/
-
+// Calibrates the flex sensor, either the open or closed state depending on input
 void flexSensor::calibrate(int state){
     if(state == 1){
-        calibrateOpen = readMux(m_pin);
+        calibrateOpen = readMux(m_channel);
     }
     if(state == 2){
-        calibrateClosed = readMux(m_pin);
+        calibrateClosed = readMux(m_channel);
     }
 }
