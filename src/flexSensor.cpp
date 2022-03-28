@@ -5,7 +5,7 @@
 
 #include <Arduino.h>
 #include <SPI.h>
-#include "SensorClass.h"
+#include "flexSensor.h"
 #include "Config.h"
 
 
@@ -15,8 +15,10 @@
  * @param ads the ADC breakout board object which the flexsensor is connected to.
 */
 
-sensor::sensor(int pin){
+flexSensor::flexSensor(int pin, int minimum_angle, int maximum_angle){
     m_pin = pin;
+    min_angle = minimum_angle;
+    max_angle = maximum_angle;
 }
 
 
@@ -25,7 +27,7 @@ sensor::sensor(int pin){
  * @return a float with the median angle value.
 */
 
-float sensor::getAngle(){
+float flexSensor::getAngle(){
     float angle = getResistance(m_pin) * 2.6716/1000 - 30.2045 - 60; //From Matlab calibration
 
     m_f.addSample(angle);
@@ -41,7 +43,7 @@ float sensor::getAngle(){
  * @return a float with the resistance of the flex sensor.
 */
 
-float sensor::getResistance(int pin){ 
+float flexSensor::getResistance(int pin){ 
     float Vflex;
 
     //Vflex = ads1118.getMilliVolts(pin) / 1000.0;
