@@ -18,7 +18,7 @@
 flexSensor::flexSensor(int channel, int minimum_angle, int maximum_angle){
     m_channel = channel;
     min_angle = minimum_angle;
-    //max_angle = maximum_angle;
+    max_angle = maximum_angle;
 }
 
 flexSensor::flexSensor(int channel){
@@ -80,10 +80,26 @@ float flexSensor::getAngle(){
 
 // Calibrates the flex sensor, either the open or closed state depending on input
 void flexSensor::calibrate(bool state){
-    if(state == false){
-        calibrateOpen = readMux(m_channel);
-    }
-    if(state == true){
-        calibrateClosed = readMux(m_channel);
-    }
+
+  for(int i = 0; i < 2*SAMPLES; i++){
+    m_f.addSample(readMux(m_channel));
+    delay(20);
+  }
+
+  if(!state){
+    calibrateOpen = m_f.getMedian();
+  }
+
+  else{
+    calibrateClosed = m_f.getMedian();
+  }
+    
+}
+
+int flexSensor::getCalibrateClosed(){
+  return calibrateClosed;
+}
+
+int flexSensor::getCalibrateOpen(){
+  return calibrateOpen;
 }

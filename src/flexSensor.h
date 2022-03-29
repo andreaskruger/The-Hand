@@ -31,4 +31,6 @@ public:
     int getValue();
     float getAngle();
     void calibrate(bool state);
+    int getCalibrateOpen();
+    int getCalibrateClosed();
 };

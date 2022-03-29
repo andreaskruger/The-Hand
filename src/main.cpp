@@ -111,6 +111,14 @@ void setup() {
   // init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board                  
   //attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
+  Serial.println("calibration 1");
+  hej123.calibrate(false);
+  delay(2000);
+  Serial.println("calibration 2");
+  delay(2000);
+  hej123.calibrate(true);
+  delay(2000);
+  Serial.println("done");
 }
 
 void loop() {
@@ -119,16 +127,21 @@ void loop() {
 
   send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
   */
-  int val1 = readMux(0);
+  /*int val1 = readMux(0);
   int val2 = readMux(1);
   Serial.print("val 1: ");
   Serial.print(val1);
   Serial.print(" val 2: ");
-  Serial.println(val2);
+  Serial.println(val2);*/
 
   Serial.print(hej123.getValue());
-  
-  delay(250);
+  Serial.print(" // ");
+  Serial.print(hej123.getAngle());
+  Serial.print(" // ");
+  Serial.print(hej123.getCalibrateOpen());
+  Serial.print(" // ");
+  Serial.println(hej123.getCalibrateClosed());
+  delay(100);
 
 }
 
