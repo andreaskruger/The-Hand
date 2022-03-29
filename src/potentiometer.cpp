@@ -63,6 +63,7 @@ int potentiometer::readMux(int channel){
   return val;
 }
 
+// Returns value read from multiplexer at given channel (for debugging purposes mainly)
 int potentiometer::getValue(){
     return readMux(m_channel);
 }
@@ -81,10 +82,27 @@ float potentiometer::getAngle(){
 
 // Calibrates the flex sensor, either the minimum or maximum angle state depending on input
 void potentiometer::calibrate(bool state){
-    if(state == false){
-        calibrateMin = readMux(m_channel);
-    }
-    if(state == true){
-        calibrateMax = readMux(m_channel);
-    }
+for(int i = 0; i < 2*SAMPLES; i++){
+    m_f.addSample(readMux(m_channel));
+    delay(20);
+  }
+
+  if(!state){
+    calibrateMin = m_f.getMedian();
+  }
+
+  else{
+    calibrateMin = m_f.getMedian();
+  }
+    
+}
+
+// Returns calibrateMax variable
+int potentiometer::getCalibrateMax(){
+  return calibrateMax;
+}
+
+// Returns calibrateMin variable
+int potentiometer::getCalibrateMin(){
+  return calibrateMin;
 }
