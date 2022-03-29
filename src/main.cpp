@@ -26,7 +26,20 @@ int sendID = 0;
 int buttonRun = 0;
 int state = 0;
 
-flexSensor hej123 = flexSensor(0);
+flexSensor thumbIP = flexSensor(0);
+flexSensor thumbMCP = flexSensor(1);
+flexSensor f1PIP = flexSensor(2);
+flexSensor f1MCP = flexSensor(3);
+flexSensor f2PIP = flexSensor(4);
+flexSensor f2MCP = flexSensor(5);
+flexSensor f3PIP = flexSensor(6);
+flexSensor f3MCP = flexSensor(7);
+flexSensor f4PIP = flexSensor(8);
+flexSensor f4MCP = flexSensor(9);
+
+flexSensor pinList[] = {thumbIP, thumbMCP, f1PIP, f1MCP, f2PIP, f2MCP, f3PIP, f3MCP, f4PIP, f4MCP};
+const int sizeList = sizeof(pinList)/sizeof(int);
+float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
 
  // Initiates the ADC breakout board.
 /*
