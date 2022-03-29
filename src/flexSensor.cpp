@@ -5,9 +5,8 @@
 
 #include <Arduino.h>
 #include <SPI.h>
-#include "flexSensor.h"
 #include "Config.h"
-
+#include "flexSensor.h"
 
 /**
  * Constructor
@@ -19,7 +18,13 @@
 flexSensor::flexSensor(int channel, int minimum_angle, int maximum_angle){
     m_channel = channel;
     min_angle = minimum_angle;
-    max_angle = maximum_angle;
+    //max_angle = maximum_angle;
+}
+
+flexSensor::flexSensor(int channel){
+    m_channel = channel;
+    min_angle = 0;
+    max_angle = 90;
 }
 
 // Changes multiplexer to read from int channel and then returns the read value
@@ -74,11 +79,11 @@ float flexSensor::getAngle(){
 
 
 // Calibrates the flex sensor, either the open or closed state depending on input
-void flexSensor::calibrate(int state){
-    if(state == 1){
+void flexSensor::calibrate(bool state){
+    if(state == false){
         calibrateOpen = readMux(m_channel);
     }
-    if(state == 2){
+    if(state == true){
         calibrateClosed = readMux(m_channel);
     }
 }

@@ -1,8 +1,8 @@
 #include <Arduino.h>
-#include <ADS1118.h>
 #include "TalkyBoi.h"
 #include "config.h"
-
+#include "flexSensor.h"
+#include "potentiometer.h"
 
 
 /*
@@ -22,9 +22,11 @@ float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
 int sendID = 0;
 */
 
+
 int buttonRun = 0;
 int state = 0;
 
+flexSensor hej123 = flexSensor(0);
 
  // Initiates the ADC breakout board.
 /*
@@ -123,6 +125,8 @@ void loop() {
   Serial.print(val1);
   Serial.print(" val 2: ");
   Serial.println(val2);
+
+  Serial.print(hej123.getValue());
   
   delay(250);
 

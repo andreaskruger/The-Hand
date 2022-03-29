@@ -21,7 +21,7 @@ private:
     // Methods
     float getResistance(int);
 public:
-    sensor(int pin){};
+    sensor(int pin);
     // Methods
     float getAngle();
 };

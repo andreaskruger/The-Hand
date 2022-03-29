@@ -14,7 +14,7 @@
 class potentiometer{
 private:
     // Variables and objects
-    int m_pin;
+    int m_channel;
     int min_angle;
     int max_angle;
     int calibrateMin;
@@ -25,9 +25,10 @@ private:
     float getResistance(int);
     int readMux(int);
 public:
-    potentiometer(int pin, int minimum_angle, int maximum_angle){};
+    potentiometer(int channel, int minimum_angle, int maximum_angle);
+    potentiometer(int channel);
     // Methods
     int getValue();
     float getAngle();
-    void calibrate(int state);
+    void calibrate(bool state);
 };
