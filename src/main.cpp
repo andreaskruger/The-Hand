@@ -1,204 +1,178 @@
 #include <Arduino.h>
-#include <readFingers.h>
-#include <talkyBoi.h>
+#include "MadgwickAHRS.h"
+#include <Wire.h>
 
-#define interuptPin 16
-
-// Pin connected to voltage divider output. used for analogRead to get resistance of the flexsensors
-const uint8_t thumbIP_Pin = ads1118.AIN_1;
-const uint8_t thumbMCP_Pin = ads1118.AIN_0;
-const uint8_t f1PIP_Pin = ads1118.AIN_3;			
-const uint8_t f1MCP_Pin = ads1118.AIN_2;			
-const int f2PIP_Pin = 39;
-const int f2MCP_Pin = 36;
-const int f3PIP_Pin = 33;
-const int f3MCP_Pin = 32;
-const int f4PIP_Pin = 35;
-const int f4MCP_Pin = 34;
-const int pinList[] = {thumbIP_Pin, thumbMCP_Pin, f1PIP_Pin, f1MCP_Pin, f2PIP_Pin, f2MCP_Pin, f3PIP_Pin, f3MCP_Pin, f4PIP_Pin, f4MCP_Pin};
-const int sizeList = sizeof(pinList)/sizeof(int);
-float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
-
-int sendID = 0;
-
-int setupState = 0;
-int state = 0;
-
-// Number of samples for the median filter.
-// More samples => larger delay
-const int SAMPLE_WINDOW = 7;
-
-// filter objects for all joints
-MedianFilter<int, SAMPLE_WINDOW> mf_thumbIP;
-MedianFilter<int, SAMPLE_WINDOW> mf_thumbMCP;
-MedianFilter<int, SAMPLE_WINDOW> mf_f1PIP;			
-MedianFilter<int, SAMPLE_WINDOW> mf_f1MCP;			
-MedianFilter<int, SAMPLE_WINDOW> mf_f2PIP;
-MedianFilter<int, SAMPLE_WINDOW> mf_f2MCP;
-MedianFilter<int, SAMPLE_WINDOW> mf_f3PIP;
-MedianFilter<int, SAMPLE_WINDOW> mf_f3MCP;
-MedianFilter<int, SAMPLE_WINDOW> mf_f4PIP;
-MedianFilter<int, SAMPLE_WINDOW> mf_f4MCP;
-MedianFilter<int, SAMPLE_WINDOW> calibrateFilter;
-
-// Initiate the breakout board
-void initBoard(){
-    ads1118.begin();    // Initialize board
-    ads1118.setSamplingRate(ads1118.RATE_860SPS);   // highest sampling rate possible
-    ads1118.setFullScaleRange(ads1118.FSR_4096);    // 12 bit
-}
-
-// Initiate the pins that 
-void initAnalogPin(){
-  pinMode(f2PIP_Pin, INPUT);  // maybe change later!
-    pinMode(f2MCP_Pin, INPUT); 
-    pinMode(f3PIP_Pin, INPUT);  
-    pinMode(f3MCP_Pin, INPUT);
-    pinMode(f4PIP_Pin, INPUT);
-    pinMode(f4MCP_Pin, INPUT);
-}
-
-/**
- * Interupt function for the initial calibration.
-*/
-void interuptCalibrate(){
-    static unsigned long last_interuptTime = 0;
-  unsigned long interupt_time = millis();
-  if((interupt_time - last_interuptTime) > 200){
-    setupState++;
-  }
-  last_interuptTime = interupt_time;
-}
-
-/**
- * Interupt function for pausing the sampling during runtime.
-*/
-void interuptFunc(){
-  static unsigned long last_interuptTime = 0;
-  unsigned long interupt_time = millis();
-  if((interupt_time - last_interuptTime) > 200){
-    if (state){
-      state = 0;
-    }else{
-      state = 1;
-    }
-  }
-  last_interuptTime = interupt_time;
-}
-
-/**
- * Helper function for printing all current joint values.
-*/
-void printAllValues(){
-  Serial.print(mf_thumbIP.getMedian() + " ");
-  Serial.print(mf_thumbMCP.getMedian() + " ");
-  Serial.print(mf_f1PIP.getMedian() + " ");
-  Serial.print(mf_f1MCP.getMedian() + " ");
-  Serial.print(mf_f2PIP.getMedian() + " ");
-  Serial.print(mf_f2MCP.getMedian() + " ");
-  Serial.print(mf_f3PIP.getMedian() + " ");
-  Serial.print(mf_f3MCP.getMedian() + " ");
-  Serial.print(mf_f4PIP.getMedian() + " ");
-  Serial.println(mf_f4MCP.getMedian());
-}
-
-void setup() {
-  Serial.begin(115200);
-  delay(100);
-  pinMode(interuptPin,INPUT_PULLDOWN);
-  getMACAdress();                          //MAC adress is run for the WIFI to work, the OTHER wearers MAC adress shall be written in this code and vice versa.
-  init_wifi();                             // Initiate ESP_NOW
-  initBoard();                             // Initiate breakout board 
-  initAnalogPin();                         // Initiate analog pins on ESP 
-
-  Serial.println("Wating for calibration...");
-  attachInterrupt(16,interuptCalibrate,RISING); //Interupt for calibration, start with open hand
-  while(setupState<1){delay(10);}               //Hold hand open to calibrate flexsensors for an open hand
-  for (int i = 0; i < sizeList; i++){
-      for (int j = 0; j <= 2*SAMPLE_WINDOW; j++){
-        delay(10);
-        int res = readResistance(pinList[i],i);
-        calibrateFilter.addSample(res);
-        //Serial.print(res);
-        //Serial.print(" ");
-        //Serial.println(calibrateFilter.getMedian());
-      }
-      calibrate(calibrateFilter.getMedian(), i, 1);           //Located in readFingers, takes a pin, type(breakoutboard or ESP), pos which is the position in 
-  }                                                             //calibrate array and state(open 1 and closed 2)
-  Serial.println("Calibrate 1: done");
-
-  while(setupState<2){delay(10);}
-  for (int i = 0; i < sizeList; i++){
-      for (int j = 0; j <= 2*SAMPLE_WINDOW; j++){
-        delay(10);
-        int res = readResistance(pinList[i],i);
-        calibrateFilter.addSample(res);
-        //Serial.print(res);
-        //Serial.print(" ");
-        //Serial.println(calibrateFilter.getMedian());
-      }
-      calibrate(calibrateFilter.getMedian(), i, 2);           //Located in readFingers, takes a pin, type(breakoutboard or ESP), pos which is the position in                                                               
-  }                                                             //calibrate array and state(open 1 and closed 2)
-
-  Serial.println("Calibrate 2: done");
-  //delay(5000);
-  Serial.print("Calibrating");
-  Serial.print(". ");
-  delay(300);
-  Serial.print(". ");
-  delay(300);
-  Serial.println(". ");
-  delay(300);
-  Serial.println("Calibration done!");
-  detachInterrupt(16);
-  delay(10);
-  attachInterrupt(16, interuptFunc, RISING); // interupt for start/stop button
-}
-
-void loop() {
-  while(state){delay(10);}                                             //interupt for pin 16 button
-
-  mf_thumbIP.addSample(getAngle(pinList[0], 0, 0));
-  mf_thumbMCP.addSample(getAngle(pinList[1], 1, 1));;
-  mf_f1PIP.addSample(getAngle(pinList[2], 2, 2));;			
-  mf_f1MCP.addSample(getAngle(pinList[3], 3, 3));;			
-  mf_f2PIP.addSample(getAngle(pinList[4], 4, 4));;
-  mf_f2MCP.addSample(getAngle(pinList[5], 5, 5));;
-  mf_f3PIP.addSample(getAngle(pinList[6], 6, 6));
-  mf_f3MCP.addSample(getAngle(pinList[7], 7, 7));;
-  mf_f4PIP.addSample(getAngle(pinList[8], 8, 8));;
-  mf_f4MCP.addSample(getAngle(pinList[9], 9, 9));;
-  
-  
-  sendID++;
-
-  send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2MCP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
-  //send(sendID, getAngle(pinList[0],0,0),getAngle(pinList[1],1,1),getAngle(pinList[2],2,2),getAngle(pinList[3],3,3),getAngle(pinList[4],4,4),getAngle(pinList[5],5,5),getAngle(pinList[6],6,6),getAngle(pinList[7],7,7),getAngle(pinList[8],8,8),getAngle(pinList[9],9,9));
  
- /*
-  Serial.print(mf_thumbIP.getMedian());
-  Serial.print(" ");
-  Serial.print(mf_thumbMCP.getMedian());
-  Serial.print(" ");
-  Serial.print(mf_f1PIP.getMedian());
-  Serial.print(" ");
-  Serial.print(mf_f1MCP.getMedian());
-  Serial.print(" ");
-  Serial.print(mf_f2PIP.getMedian());
-  Serial.print(" ");
-  Serial.print(mf_f2MCP.getMedian());
-  Serial.print(" ");
-  Serial.print(mf_f3PIP.getMedian());
-  Serial.print(" ");
-  Serial.print(mf_f3MCP.getMedian());
-  Serial.print(" ");
-  Serial.print(mf_f4PIP.getMedian());
-  Serial.print(" ");
-  Serial.println(mf_f4MCP.getMedian());
-  */
-
-  delay(16);
+long loopTimer, loopTimer2;
+int temperature;
+double accelPitch;
+double accelRoll;
+double accelYaw;
+long acc_x, acc_y, acc_z;
+float accel_x, accel_y, accel_z;
+double gyroRoll, gyroPitch, gyroYaw;
+int gyro_x, gyro_y, gyro_z;
+long gyro_x_cal, gyro_y_cal, gyro_z_cal;
+float rotation_x, rotation_y, rotation_z;
+double freq, dt;
+double tau = 0.98;
+double roll = 0;
+double pitch = 0;
+double yaw = 0;
+ 
+// 250 deg/s --> 131.0, 500 deg/s --> 65.5, 1000 deg/s --> 32.8, 2000 deg/s --> 16.4
+long scaleFactorGyro = 32.8;
+ 
+// 2g --> 16384 , 4g --> 8192 , 8g --> 4096, 16g --> 2048
+long scaleFactorAccel = 8192;
+ 
+void read_mpu_6050_data() {
+  // Subroutine for reading the raw data
+  Wire.beginTransmission(0x68);
+  Wire.write(0x3B);
+  Wire.endTransmission();
+  Wire.requestFrom(0x68, 14);
+ 
+  // Read data --> Temperature falls between acc and gyro registers
+  acc_x = Wire.read() << 8 | Wire.read();
+  acc_y = Wire.read() << 8 | Wire.read();
+  acc_z = Wire.read() << 8 | Wire.read();
+  temperature = Wire.read() <<8 | Wire.read();
+  gyro_x = Wire.read()<<8 | Wire.read();
+  gyro_y = Wire.read()<<8 | Wire.read();
+  gyro_z = Wire.read()<<8 | Wire.read();
 }
+ 
+ 
+void setup_mpu_6050_registers() {
+  //Activate the MPU-6050
+  Wire.beginTransmission(0x68);
+  Wire.write(0x6B);
+  Wire.write(0x00);
+  Wire.endTransmission();
+ 
+  // Configure the accelerometer
+  // Wire.write(0x__);
+  // Wire.write; 2g --> 0x00, 4g --> 0x08, 8g --> 0x10, 16g --> 0x18
+  Wire.beginTransmission(0x68);
+  Wire.write(0x1C);
+  Wire.write(0x08);
+  Wire.endTransmission();
+ 
+  // Configure the gyro
+  // Wire.write(0x__);
+  // 250 deg/s --> 0x00, 500 deg/s --> 0x08, 1000 deg/s --> 0x10, 2000 deg/s --> 0x18
+  Wire.beginTransmission(0x68);
+  Wire.write(0x1B);
+  Wire.write(0x08);
+  Wire.endTransmission();
+}
+ 
+ 
+void setup() {
+  // Start
+  Wire.begin();
+  Serial.begin(115200);
+ 
+  // Setup the registers of the MPU-6050 and start up
+  setup_mpu_6050_registers();
+ 
+  // Calibration
+  Serial.println("Calibrating gyro, place on level surface and do not move.");
+ 
+  // Take 3000 readings for each coordinate and then find average offset
+  for (int cal_int = 0; cal_int < 3000; cal_int ++){
+    if(cal_int % 200 == 0)Serial.print(".");
+    read_mpu_6050_data();
+    gyro_x_cal += gyro_x;
+    gyro_y_cal += gyro_y;
+    gyro_z_cal += gyro_z;
+ 
+    delay(3);
+  }
+ 
+  // Average the values
+  gyro_x_cal /= 3000;
+  gyro_y_cal /= 3000;
+  gyro_z_cal /= 3000;
+ 
+  // Display headers
+  Serial.print("\nNote 1: Yaw is not filtered and will drift!\n");
+  Serial.print("\nNote 2: Make sure sampling frequency is ~250 Hz\n");
+  Serial.print("Sampling Frequency (Hz)\t\t");
+  Serial.print("Roll (deg)\t\t");
+  Serial.print("Pitch (deg)\t\t");
+  Serial.print("Yaw (deg)\t\t\n");
+  delay(2000);
+ 
+  // Reset the loop timer
+  loopTimer = micros();
+  loopTimer2 = micros();
+}
+ 
+ 
+void loop() {
+  freq = 1/((micros() - loopTimer2) * 1e-6);
+  loopTimer2 = micros();
+  dt = 1/freq;
+ 
+  // Read the raw acc data from MPU-6050
+  read_mpu_6050_data();
+ 
+  // Subtract the offset calibration value
+  gyro_x -= gyro_x_cal;
+  gyro_y -= gyro_y_cal;
+  gyro_z -= gyro_z_cal;
+ 
+  // Convert to instantaneous degrees per second
+  rotation_x = (double)gyro_x / (double)scaleFactorGyro;
+  rotation_y = (double)gyro_y / (double)scaleFactorGyro;
+  rotation_z = (double)gyro_z / (double)scaleFactorGyro;
+ 
+  // Convert to g force
+  accel_x = (double)acc_x / (double)scaleFactorAccel;
+  accel_y = (double)acc_y / (double)scaleFactorAccel;
+  accel_z = (double)acc_z / (double)scaleFactorAccel;
+ 
+ 
+  MadgwickAHRSupdateIMU(rotation_x, rotation_y, rotation_z, accel_x, accel_y, accel_z);
+  
+  // Complementary filter
+  accelPitch = atan2(accel_y, accel_z) * RAD_TO_DEG; //får ut en vinkel av detta
+  accelRoll = atan2(accel_x, accel_z) * RAD_TO_DEG;
+  accelYaw = atan2(accel_x, accel_y) * RAD_TO_DEG;
+ 
+  pitch = (tau)*(pitch + rotation_x*dt) + (1-tau)*(accelPitch);
+  roll = (tau)*(roll - rotation_y*dt) + (1-tau)*(accelRoll);
+  yaw = (tau)*(yaw + rotation_z*dt) + (1-tau)*(accelYaw);
+ 
+  gyroPitch += rotation_x*dt;
+  gyroRoll -= rotation_y*dt;
+  gyroYaw += rotation_z*dt;
+ 
+  // Visualize just the roll
+   //Serial.print(roll); Serial.print(",  ");
+   //Serial.print(gyroRoll); Serial.print(",  ");
+   //Serial.println(accelRoll);
+ 
+  // Visualize just the pitch
+   //Serial.print(pitch); Serial.print(",");
+   //Serial.print(gyroPitch); Serial.print(",");
+   //Serial.println(accelPitch);
+ 
+  // Data out serial monitor
+  
+  //Serial.print(freq,0);   Serial.print(" , ");
+  Serial.print(roll,1);   Serial.print(" , "); 
+  Serial.print(pitch,1);  Serial.print(" , "); 
+  Serial.print(gyroYaw,1);  Serial.println(" , "); 
+  //Serial.print(accel_x,1);   Serial.print(" , ");
+  //Serial.print(accel_y,1);   Serial.print(" , ");
+  //Serial.println(accel_z,1); 
+ 
 
-
+  // Wait until the loopTimer reaches 4000us (250Hz) before next loop
+  while (micros() - loopTimer <= 2800);
+  loopTimer = micros();
+}
 
