@@ -42,11 +42,12 @@ float sensor::getAngle(){
 */
 
 float sensor::getResistance(int pin){ 
-    float Vflex;
+    float Vflex = 0.0;
 
     //Vflex = ads1118.getMilliVolts(pin) / 1000.0;
     
-    float Rflex = R_DIV * (VCC / Vflex - 1.0);
+    //float Rflex = R_DIV * (VCC / Vflex - 1.0);
+    float Rflex = 0.0;
     return Rflex;
 }
 

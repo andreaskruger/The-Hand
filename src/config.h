@@ -11,9 +11,9 @@
 #define s2  27
 #define s3  14
 
-// Change these constants according to your project's design
-const float VCC = 5;			// Voltage that the sensors are connected to
-const float R_DIV = 100000.0;	// Resistor used to create a voltage divider
+// Connection for pins on display
+#define DISP_RES 32 
+#define DISP_DC 33
 
 // Number of samples for the median filter
 const int SAMPLES = 20;

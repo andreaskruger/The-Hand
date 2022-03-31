@@ -1,6 +1,9 @@
 #ifndef FreeMono12pt7b_H
 #define FreeMono12pt7b_H
 
+#include <stdint.h>
+#include <Arduino_GFX_Library.h>
+
 #ifdef __AVR__
 #include <avr/io.h>
 #include <avr/pgmspace.h>
