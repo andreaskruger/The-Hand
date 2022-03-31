@@ -1,9 +1,19 @@
 #include <Arduino.h>
 #include "TalkyBoi.h"
+<<<<<<< HEAD
+
+// Pin connected to voltage divider output. used for analogRead to get resistance of the flexsensors
+const int s0 = 25;
+const int s1 = 26;
+const int s2 = 27;
+const int s3 = 14;
+const int SIG_pin = 34;
+=======
 #include "config.h"
 #include "flexSensor.h"
 #include "potentiometer.h"
 
+>>>>>>> 73866abe72aa3be213d0691ab3777286f6b7531b
 
 /*
 const uint8_t thumbIP_Pin = ads1118.AIN_0;
