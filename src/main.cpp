@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include <ADS1118.h>
 #include "TalkyBoi.h"
+<<<<<<< HEAD
 
 // Pin connected to voltage divider output. used for analogRead to get resistance of the flexsensors
 const int s0 = 25;
@@ -8,6 +8,12 @@ const int s1 = 26;
 const int s2 = 27;
 const int s3 = 14;
 const int SIG_pin = 34;
+=======
+#include "config.h"
+#include "flexSensor.h"
+#include "potentiometer.h"
+
+>>>>>>> 73866abe72aa3be213d0691ab3777286f6b7531b
 
 /*
 const uint8_t thumbIP_Pin = ads1118.AIN_0;
@@ -26,9 +32,24 @@ float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
 int sendID = 0;
 */
 
+
 int buttonRun = 0;
 int state = 0;
 
+flexSensor thumbIP = flexSensor(0);
+flexSensor thumbMCP = flexSensor(1);
+flexSensor f1PIP = flexSensor(2);
+flexSensor f1MCP = flexSensor(3);
+flexSensor f2PIP = flexSensor(4);
+flexSensor f2MCP = flexSensor(5);
+flexSensor f3PIP = flexSensor(6);
+flexSensor f3MCP = flexSensor(7);
+flexSensor f4PIP = flexSensor(8);
+flexSensor f4MCP = flexSensor(9);
+
+flexSensor pinList[] = {thumbIP, thumbMCP, f1PIP, f1MCP, f2PIP, f2MCP, f3PIP, f3MCP, f4PIP, f4MCP};
+const int sizeList = sizeof(pinList)/sizeof(int);
+float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
 
  // Initiates the ADC breakout board.
 /*
@@ -79,7 +100,7 @@ int readMux(int channel){
   }
 
   //read the value at the SIG pin
-  int val = analogRead(SIG_pin);
+  int val = analogRead(SIG_PIN);
 
   //return the value
   return val;
@@ -113,6 +134,14 @@ void setup() {
   // init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board                  
   //attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
+  Serial.println("calibration 1");
+  hej123.calibrate(false);
+  delay(2000);
+  Serial.println("calibration 2");
+  delay(2000);
+  hej123.calibrate(true);
+  delay(2000);
+  Serial.println("done");
 }
 
 void loop() {
@@ -121,14 +150,21 @@ void loop() {
 
   send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
   */
-  int val1 = readMux(0);
+  /*int val1 = readMux(0);
   int val2 = readMux(1);
   Serial.print("val 1: ");
   Serial.print(val1);
   Serial.print(" val 2: ");
-  Serial.println(val2);
-  
-  delay(250);
+  Serial.println(val2);*/
+
+  Serial.print(hej123.getValue());
+  Serial.print(" // ");
+  Serial.print(hej123.getAngle());
+  Serial.print(" // ");
+  Serial.print(hej123.getCalibrateOpen());
+  Serial.print(" // ");
+  Serial.println(hej123.getCalibrateClosed());
+  delay(100);
 
 }
 
