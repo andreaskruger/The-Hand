@@ -26,6 +26,7 @@ int sendID = 0;
 
 int buttonRun = 0;
 int state = 0;
+int calibrateState = 0;
 
 flexSensor thumbIP = flexSensor(0);
 flexSensor thumbMCP = flexSensor(1);
@@ -97,7 +98,17 @@ int readMux(int channel){
   return val;
 }
 
-
+/**
+ * Interupt function for the initial calibration.
+*/
+void interuptCalibrate(){
+    static unsigned long last_interuptTime = 0;
+  unsigned long interupt_time = millis();
+  if((interupt_time - last_interuptTime) > 200){
+    calibrateState++;
+  }
+  last_interuptTime = interupt_time;
+}
 
 /**
  * Toggles the state of the microcontroller.
@@ -117,6 +128,52 @@ void interuptFunc(){
   last_interuptTime = interupt_time;
 }
 
+/*Calibrates all 10 flex sensors for flexion movement. First hold hand open until OK 
+  is printed and then have hand closed until OK is printed again */
+void calibrateFlexion(){
+  attachInterrupt(16,interuptCalibrate,RISING);
+  Serial.println("Flexion Calibr.");
+  disp_clr();
+  disp_setTextColor(WHITE);
+  disp_println("Flexion Calibr.");
+  disp_println("----------------");
+  while(calibrateState < 1){delay(10);}
+  Serial.println("HAND OPEN");
+  disp_setTextColor(RED);
+  disp_print("HAND OPEN");
+  delay(1000);
+  for(int i = 0; i<10 ; i++){
+    pinList[i].calibrate(false);
+  }
+  Serial.println("OK");
+  disp_setTextColor(GREEN);
+  disp_println(" OK");
+  while(calibrateState < 2){delay(10);}
+  disp_setTextColor(WHITE);
+  disp_println("-----");
+  delay(100);
+  disp_setTextColor(RED);
+  Serial.println("HAND CLOSED");
+  disp_print("HAND CLOSED");
+  for(int i = 0; i<10 ; i++){
+    pinList[i].calibrate(true);
+  }
+  Serial.println("OK");
+  disp_setTextColor(GREEN);
+  disp_println(" OK");
+  delay(100);
+  disp_setTextColor(WHITE);
+  disp_println("-----");
+  delay(100);
+  disp_println("CALIBRATION");
+  disp_println("COMPLETE");
+  while(calibrateState < 3){delay(10);}
+  calibrateState = 0;
+  attachInterrupt(17,interuptFunc,HIGH);
+  disp_clr();
+}
+
+
 
 void setup() {
   Serial.begin(115200);
@@ -125,7 +182,9 @@ void setup() {
   // init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board        
   disp_initialize();          
-  //attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
+  attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
+  calibrateFlexion();
+
 }
 
 void loop() {
@@ -134,37 +193,6 @@ void loop() {
 
   send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
   */
-  disp_println("123454321");
-  delay(100);
 
 }
 
-/*Calibrates all 10 flex sensors for flexion movement. First hold hand open until OK 
-  is printed and then have hand closed until OK is printed again */
-void calibrateFlexSensors(){
-  Serial.println("HAND OPEN");
-  disp_clr();
-  disp_setTextColor(RED);
-  disp_println("HAND OPEN");
-  delay(1000);
-  for(int i = 0; i<10 ; i++){
-    pinList[i].calibrate(false);
-  }
-  Serial.println("OK");
-  disp_setTextColor(GREEN);
-  disp_println("OK");
-  delay(2000);
-  Serial.println("HAND CLOSED");
-  disp_clr();
-  disp_setTextColor(RED);
-  disp_println("HAND CLOSED");
-  delay(1000);
-  for(int i = 0; i<10 ; i++){
-    pinList[i].calibrate(true);
-  }
-  Serial.println("OK");
-  disp_setTextColor(GREEN);
-  disp_println("OK");
-  delay(2000);
-  disp_clr();
-}

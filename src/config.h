@@ -14,6 +14,9 @@
 // Connection for pins on display
 #define DISP_RES 32 
 #define DISP_DC 33
+#define DISP_CS 5
+#define DISP_SCK 18
+#define DISP_MOSI 23
 
 // Number of samples for the median filter
 const int SAMPLES = 20;

@@ -4,7 +4,7 @@
 #include "config.h"
 
 // Screen setup
-Arduino_DataBus *bus = new Arduino_ESP32SPI(33 /* DC */, 5 /* CS */, 18 /* SCK */, 23 /* MOSI */, -1 /* MISO */, VSPI /* spi_num */);
+Arduino_DataBus *bus = new Arduino_ESP32SPI(DISP_DC /* DC */, DISP_CS /* CS */, DISP_SCK /* SCK */, DISP_MOSI /* MOSI */, -1 /* MISO */, VSPI /* spi_num */);
 //Arduino_DataBus *bus = new Arduino_ESP32SPI(33 /* DC */, 5 /* CS */, 18 /* SCK */, 23 /* MOSI */, 19 /* MISO */);
 Arduino_GFX *gfx = new Arduino_ST7789(bus, 7 /* RST */, 0 /* rotation */, true /* IPS */,
     240 /* width */, 240 /* height */, 0 /* col offset 1 */, 0 /* row offset 1 */);
@@ -13,17 +13,12 @@ void disp_initialize(){
     // Screen setup
     pinMode(DISP_RES, OUTPUT);
     pinMode(DISP_DC, OUTPUT);
-    digitalWrite(32, HIGH);         // Keep reset pin high
-    digitalWrite(33, HIGH);          // Set data mode to "Command"
+    digitalWrite(DISP_RES, HIGH);         // Keep reset pin high
+    digitalWrite(DISP_RES, HIGH);          // Set data mode to "Command"
     gfx->begin();                   // Start the screen object
     gfx->fillScreen(BLACK);         // "Clear" the screen
     gfx->setCursor(5, 15);          // Set print pointer to top left corner
     gfx->setFont(&FreeMono12pt7b);  // Set font
-    gfx->setTextColor(RED);         // Set color
-    gfx->println("Hello world!");
-    delay(1000);
-
-    gfx->println("bababooba");
 }
 
 // Clear screen and reset cursor
