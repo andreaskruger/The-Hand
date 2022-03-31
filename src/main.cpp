@@ -9,8 +9,6 @@ const int s2 = 27;
 const int s3 = 14;
 const int SIG_pin = 34;
 
-
-
 /*
 const uint8_t thumbIP_Pin = ads1118.AIN_0;
 const uint8_t thumbMCP_Pin =  ads1118.AIN_1;
