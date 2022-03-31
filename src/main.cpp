@@ -139,5 +139,32 @@ void loop() {
 
 }
 
-
-
+/*Calibrates all 10 flex sensors for flexion movement. First hold hand open until OK 
+  is printed and then have hand closed until OK is printed again */
+void calibrateFlexSensors(){
+  Serial.println("HAND OPEN");
+  disp_clr();
+  disp_setTextColor(RED);
+  disp_println("HAND OPEN");
+  delay(1000);
+  for(int i = 0; i<10 ; i++){
+    pinList[i].calibrate(false);
+  }
+  Serial.println("OK");
+  disp_setTextColor(GREEN);
+  disp_println("OK");
+  delay(2000);
+  Serial.println("HAND CLOSED");
+  disp_clr();
+  disp_setTextColor(RED);
+  disp_println("HAND CLOSED");
+  delay(1000);
+  for(int i = 0; i<10 ; i++){
+    pinList[i].calibrate(true);
+  }
+  Serial.println("OK");
+  disp_setTextColor(GREEN);
+  disp_println("OK");
+  delay(2000);
+  disp_clr();
+}

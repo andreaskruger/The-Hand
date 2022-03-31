@@ -80,7 +80,7 @@ float potentiometer::getAngle(){
 }
 
 
-// Calibrates the flex sensor, either the minimum or maximum angle state depending on input
+// Calibrates the potentiometer, either the minimum or maximum angle state depending on input
 void potentiometer::calibrate(bool state){
 for(int i = 0; i < 2*SAMPLES; i++){
     m_f.addSample(readMux(m_channel));

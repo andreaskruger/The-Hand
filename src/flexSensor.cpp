@@ -96,10 +96,12 @@ void flexSensor::calibrate(bool state){
     
 }
 
+// returns value of calibrateClosed
 int flexSensor::getCalibrateClosed(){
   return calibrateClosed;
 }
 
+// returns value of calibrateOpen
 int flexSensor::getCalibrateOpen(){
   return calibrateOpen;
 }
