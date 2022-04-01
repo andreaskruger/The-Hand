@@ -38,8 +38,13 @@ flexSensor f3PIP = flexSensor(6);
 flexSensor f3MCP = flexSensor(7);
 flexSensor f4PIP = flexSensor(8);
 flexSensor f4MCP = flexSensor(9);
+potentiometer f1AD = potentiometer(10);
+potentiometer f2AD = potentiometer(11);
+potentiometer f3AD = potentiometer(12);
+potentiometer f4AD = potentiometer(13);
 
 flexSensor pinList[] = {thumbIP, thumbMCP, f1PIP, f1MCP, f2PIP, f2MCP, f3PIP, f3MCP, f4PIP, f4MCP};
+potentiometer potList[4] = {f1AD,f2AD,f3AD,f4AD};
 const int sizeList = sizeof(pinList)/sizeof(int);
 float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
 
@@ -102,7 +107,7 @@ int readMux(int channel){
  * Interupt function for the initial calibration.
 */
 void interuptCalibrate(){
-    static unsigned long last_interuptTime = 0;
+  static unsigned long last_interuptTime = 0;
   unsigned long interupt_time = millis();
   if((interupt_time - last_interuptTime) > 200){
     calibrateState++;
@@ -137,7 +142,7 @@ void calibrateFlexion(){
   disp_setTextColor(WHITE);
   disp_println("Flexion Calibr.");
   disp_println("----------------");
-  while(calibrateState < 1){delay(10);}
+  while(calibrateState < 1){delay(50);}
   Serial.println("HAND OPEN");
   disp_setTextColor(RED);
   disp_print("HAND OPEN");
@@ -148,7 +153,7 @@ void calibrateFlexion(){
   Serial.println("OK");
   disp_setTextColor(GREEN);
   disp_println(" OK");
-  while(calibrateState < 2){delay(10);}
+  while(calibrateState < 2){delay(50);}
   disp_setTextColor(WHITE);
   disp_println("-----");
   delay(100);
@@ -167,13 +172,63 @@ void calibrateFlexion(){
   delay(100);
   disp_println("CALIBRATION");
   disp_println("COMPLETE");
-  while(calibrateState < 3){delay(10);}
+  while(calibrateState < 3){delay(50);}
   calibrateState = 0;
-  attachInterrupt(17,interuptFunc,HIGH);
   disp_clr();
+  attachInterrupt(17,interuptFunc,HIGH);
 }
 
+/* Calibrates potentiometers for measuring abduction and adduction of fingers.
+   Each finger is calibrated individually with instructions printed on the display */
+void calibrateAbduction(){
+  attachInterrupt(16,interuptCalibrate,RISING);
+  for(int i = 0; i < sizeof(potList)/sizeof(potList[i]); i++){
+    disp_clr();
+    disp_setTextColor(WHITE);
+    disp_println("Abduct. Calibr.");
+    disp_println("----------------");
+    disp_print("keep F");
+    disp_print(i+1);
+    disp_println(" left");
+    Serial.println("Abduct. Calibr.");
+    Serial.print("keep F");
+    Serial.print(i+1);
+    Serial.println(" left");
+    Serial.print(sizeof(potList));
+    while(calibrateState < i+1){delay(50);}
 
+    potList[i].calibrate(false);
+    disp_setTextColor(GREEN);
+    Serial.println("OK");
+    disp_println("OK");
+    delay(100);
+    disp_setTextColor(WHITE);
+    disp_println("-----");
+    disp_print("keep F");
+    disp_print(i+1);
+    disp_println(" right");
+    Serial.print("keep F");
+    Serial.print(i+1);
+    Serial.print(" right");
+    while(calibrateState < i+2){delay(50);}
+
+    potList[i].calibrate(true);
+    disp_setTextColor(GREEN);
+    disp_println("OK");
+    Serial.println("OK");
+    delay(100);
+    disp_setTextColor(WHITE);
+    disp_println("-----");
+    delay(500);
+  }
+  disp_println("CALIBRATION");
+  disp_println("COMPLETE");
+  Serial.println("CALIBRATION COMPLETE");
+  while(calibrateState < 3){delay(50);}
+  calibrateState = 0;
+  disp_clr();
+  attachInterrupt(17,interuptFunc,HIGH);
+}
 
 void setup() {
   Serial.begin(115200);
@@ -183,7 +238,7 @@ void setup() {
   initBoard();                             // Initiate breakout board        
   disp_initialize();          
   attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
-  calibrateFlexion();
+  calibrateAbduction();
 
 }
 

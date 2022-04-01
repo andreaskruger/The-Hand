@@ -37,6 +37,14 @@ void disp_print(String string){
     gfx->print(string);
 }
 
+void disp_println(int num){
+    gfx->println(num);
+}
+
+void disp_print(int num){
+    gfx->print(num);
+}
+
 // Set cursor location on screen
 void disp_setCursor(int16_t x, int16_t y){
     gfx->setCursor(x,y);
