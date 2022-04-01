@@ -13,16 +13,33 @@
  * @param channel the channel to which the flex sensor is connected to.
  * @param minimum_angle the minimum angle of flex sensor.
  * @param maximum_angle the maximum angle of flex sensor.
+ * @param multipl boolean that states whether the flex sensor is connected to the multiplexer or directly to the esp32.
 */
 
 flexSensor::flexSensor(int channel, int minimum_angle, int maximum_angle){
+    multipl = true;
     m_channel = channel;
     min_angle = minimum_angle;
     max_angle = maximum_angle;
 }
 
 flexSensor::flexSensor(int channel){
+    multipl = true;
     m_channel = channel;
+    min_angle = 0;
+    max_angle = 90;
+}
+
+flexSensor::flexSensor(bool multiplexer, int pin, int minimum_angle, int maximum_angle){
+    multipl = multiplexer;
+    m_channel = pin;
+    min_angle = minimum_angle;
+    max_angle = maximum_angle;
+}
+
+flexSensor::flexSensor(bool multiplexer, int pin){
+    multipl = multiplexer;
+    m_channel = pin;
     min_angle = 0;
     max_angle = 90;
 }
@@ -63,7 +80,13 @@ int flexSensor::readMux(int channel){
 }
 
 int flexSensor::getValue(){
+  if(multipl){
     return readMux(m_channel);
+  }
+  else{
+    return analogRead(m_channel);
+  }
+
 }
 
 
@@ -72,27 +95,38 @@ int flexSensor::getValue(){
  * @return a float with the median angle value.
 */
 float flexSensor::getAngle(){
-    float angle = map(readMux(m_channel),calibrateOpen,calibrateClosed,min_angle,max_angle);
-    m_f.addSample(angle);
-    return m_f.getMedian();
+  float angle;
+  if(multipl){
+    angle = map(readMux(m_channel),calibrateOpen,calibrateClosed,min_angle,max_angle);
+  }
+  else{
+    angle = map(analogRead(m_channel),calibrateOpen,calibrateClosed,min_angle,max_angle);
+  }
+  m_f.addSample(angle);
+  return m_f.getMedian();
 }
 
 
 // Calibrates the flex sensor, either the open or closed state depending on input
 void flexSensor::calibrate(bool state){
 
-  for(int i = 0; i < 2*SAMPLES; i++){
-    m_f.addSample(readMux(m_channel));
+  if(multipl){
+    for(int i = 0; i < 2*SAMPLES; i++){
+      m_f.addSample(readMux(m_channel));
+    }
+  }
+  else{
+    for(int i = 0; i < 2*SAMPLES; i++){
+      m_f.addSample(analogRead(m_channel));
+    }
   }
 
   if(!state){
     calibrateOpen = m_f.getMedian();
   }
-
   else{
     calibrateClosed = m_f.getMedian();
   }
-    
 }
 
 // returns value of calibrateClosed

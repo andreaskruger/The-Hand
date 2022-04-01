@@ -46,7 +46,7 @@ potentiometer f4AD = potentiometer(13);
 flexSensor pinList[] = {thumbIP, thumbMCP, f1PIP, f1MCP, f2PIP, f2MCP, f3PIP, f3MCP, f4PIP, f4MCP};
 potentiometer potList[4] = {f1AD,f2AD,f3AD,f4AD};
 const int sizeList = sizeof(pinList)/sizeof(int);
-float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
+float fingerAngles[14] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
  // Initiates the ADC breakout board.
 /*
@@ -142,24 +142,23 @@ void calibrateFlexion(){
   disp_setTextColor(WHITE);
   disp_println("Flexion Calibr.");
   disp_println("----------------");
-  while(calibrateState < 1){delay(50);}
   Serial.println("HAND OPEN");
   disp_setTextColor(RED);
   disp_print("HAND OPEN");
-  delay(1000);
+  while(calibrateState < 1){delay(50);}
   for(int i = 0; i<10 ; i++){
     pinList[i].calibrate(false);
   }
   Serial.println("OK");
   disp_setTextColor(GREEN);
   disp_println(" OK");
-  while(calibrateState < 2){delay(50);}
+  delay(100);
   disp_setTextColor(WHITE);
   disp_println("-----");
-  delay(100);
   disp_setTextColor(RED);
   Serial.println("HAND CLOSED");
   disp_print("HAND CLOSED");
+  while(calibrateState < 2){delay(50);}
   for(int i = 0; i<10 ; i++){
     pinList[i].calibrate(true);
   }
@@ -236,10 +235,10 @@ void setup() {
   // getMACAdress();                          //MAC adress is run for the WIFI to work, the OTHER wearers MAC adress shall be written in this code and vice versa.
   // init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board        
-  disp_initialize();          
+  disp_initialize();                       // Initialise display
   attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
-  calibrateAbduction();
-
+  calibrateFlexion();                       // Calibrate flextion movement of fingers
+  calibrateAbduction();                     // Calibrate abduction and adduction movement of fingers
 }
 
 void loop() {

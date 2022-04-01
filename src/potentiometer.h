@@ -19,14 +19,16 @@ private:
     int max_angle;
     int calibrateMin;
     int calibrateMax;
+    bool multipl;
     // Number of samples are defined in config.h
     MedianFilter<float, SAMPLES> m_f;
     // Methods
-    float getResistance(int);
     int readMux(int);
 public:
     potentiometer(int channel, int minimum_angle, int maximum_angle);
     potentiometer(int channel);
+    potentiometer(bool multiplexer, int pin, int minimum_angle, int maximum_angle);
+    potentiometer(bool multuplexer, int pin);
     // Methods
     int getValue();
     float getAngle();

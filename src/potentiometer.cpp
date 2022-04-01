@@ -14,18 +14,21 @@
  * @param channel the channel to which the flex sensor is connected to.
  * @param minimum_angle the minimum angle of flex sensor.
  * @param maximum_angle the maximum angle of flex sensor.
+ * @param multipl boolean that states whether the potentiometer is connected to the multiplexer or directly to the esp32.
 */
 
 potentiometer::potentiometer(int channel, int minimum_angle, int maximum_angle){
-    m_channel = channel;
-    min_angle = minimum_angle;
-    max_angle = maximum_angle;
+  multipl = true;
+  m_channel = channel;
+  min_angle = minimum_angle;
+  max_angle = maximum_angle;
 }
 
 potentiometer::potentiometer(int channel){
-    m_channel = channel;
-    min_angle = -15;
-    max_angle = 15;
+  multipl =  true;
+  m_channel = channel;
+  min_angle = -15;
+  max_angle = 15;
 }
 
 // Changes multiplexer to read from int channel and then returns the read value
@@ -65,7 +68,12 @@ int potentiometer::readMux(int channel){
 
 // Returns value read from multiplexer at given channel (for debugging purposes mainly)
 int potentiometer::getValue(){
+  if(multipl){
     return readMux(m_channel);
+  }
+  else{
+    return analogRead(m_channel);
+  }
 }
 
 
@@ -74,17 +82,29 @@ int potentiometer::getValue(){
  * @return a float with the median angle value.
 */
 float potentiometer::getAngle(){
-    float angle = map(readMux(m_channel), calibrateMin, calibrateMax, min_angle, max_angle);
-    m_f.addSample(angle);
-    return m_f.getMedian();
+  float angle;
+  if(multipl){
+    angle = map(readMux(m_channel), calibrateMin, calibrateMax, min_angle, max_angle);
+  }
+  else{
+    angle = map(analogRead(m_channel), calibrateMin, calibrateMax, min_angle, max_angle);
+  }
+  m_f.addSample(angle);
+  return m_f.getMedian();
 }
 
 
 // Calibrates the potentiometer, either the minimum or maximum angle state depending on input
 void potentiometer::calibrate(bool state){
-for(int i = 0; i < 2*SAMPLES; i++){
-    m_f.addSample(readMux(m_channel));
-    delay(20);
+  if(multipl){
+    for(int i = 0; i < 2*SAMPLES; i++){
+      m_f.addSample(readMux(m_channel));
+    }
+  }
+  else{
+    for(int i = 0; i < 2*SAMPLES; i++){
+      m_f.addSample(analogRead(m_channel));
+    }
   }
 
   if(!state){
