@@ -48,15 +48,7 @@ potentiometer potList[4] = {f1AD,f2AD,f3AD,f4AD};
 const int sizeList = sizeof(pinList)/sizeof(int);
 float fingerAngles[14] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
- // Initiates the ADC breakout board.
-/*
-void initBoard2(){
-    ads1118.begin();    // Initialize board
-    ads1118.setSamplingRate(ads1118.RATE_860SPS);   // highest sampling rate possible
-    ads1118.setFullScaleRange(ads1118.FSR_4096);    // 12 bit
-}
-*/
-
+ // Initiates the multiplexer.
 void initBoard(){
   pinMode(s0, OUTPUT);
   pinMode(s1, OUTPUT);
@@ -133,6 +125,15 @@ void interuptFunc(){
   last_interuptTime = interupt_time;
 }
 
+void display_angle(potentiometer sensor){
+  disp_setTextColor(WHITE);
+  disp_println(sensor.getAngle());
+}
+void display_angle(flexSensor sensor){
+  disp_setTextColor(WHITE);
+  disp_println(sensor.getAngle());
+}
+
 /*Calibrates all 10 flex sensors for flexion movement. First hold hand open until OK 
   is printed and then have hand closed until OK is printed again */
 void calibrateFlexion(){
@@ -143,7 +144,6 @@ void calibrateFlexion(){
   disp_println("Flexion Calibr.");
   disp_println("----------------");
   Serial.println("HAND OPEN");
-  disp_setTextColor(RED);
   disp_print("HAND OPEN");
   while(calibrateState < 1){delay(50);}
   for(int i = 0; i<10 ; i++){
@@ -155,7 +155,6 @@ void calibrateFlexion(){
   delay(100);
   disp_setTextColor(WHITE);
   disp_println("-----");
-  disp_setTextColor(RED);
   Serial.println("HAND CLOSED");
   disp_print("HAND CLOSED");
   while(calibrateState < 2){delay(50);}
@@ -242,6 +241,7 @@ void setup() {
 }
 
 void loop() {
+
   /*
   sendID++;
 

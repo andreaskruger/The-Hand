@@ -31,6 +31,20 @@ potentiometer::potentiometer(int channel){
   max_angle = 15;
 }
 
+potentiometer::potentiometer(bool multiplexer, int pin, int minimum_angle, int maximum_angle){
+  multipl = multiplexer;
+  m_channel = pin;
+  min_angle = minimum_angle;
+  max_angle = maximum_angle;
+}
+
+potentiometer::potentiometer(bool multiplexer, int pin){
+  multipl = multiplexer;
+  m_channel = pin;
+  min_angle = -15;
+  max_angle = 15;
+}
+
 // Changes multiplexer to read from int channel and then returns the read value
 int potentiometer::readMux(int channel){
   int controlPin[] = {s0, s1, s2, s3};
