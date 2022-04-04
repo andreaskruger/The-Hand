@@ -16,28 +16,24 @@
  * @param maximum_angle the maximum angle of flex sensor.
  * @param multipl boolean that states whether the potentiometer is connected to the multiplexer or directly to the esp32.
 */
-
 potentiometer::potentiometer(int channel, int minimum_angle, int maximum_angle){
   multipl = true;
   m_channel = channel;
   min_angle = minimum_angle;
   max_angle = maximum_angle;
 }
-
 potentiometer::potentiometer(int channel){
   multipl =  true;
   m_channel = channel;
   min_angle = -15;
   max_angle = 15;
 }
-
 potentiometer::potentiometer(bool multiplexer, int pin, int minimum_angle, int maximum_angle){
   multipl = multiplexer;
   m_channel = pin;
   min_angle = minimum_angle;
   max_angle = maximum_angle;
 }
-
 potentiometer::potentiometer(bool multiplexer, int pin){
   multipl = multiplexer;
   m_channel = pin;
@@ -45,7 +41,10 @@ potentiometer::potentiometer(bool multiplexer, int pin){
   max_angle = 15;
 }
 
-// Changes multiplexer to read from int channel and then returns the read value
+/**
+ * Changes multiplexer to read from int channel and then returns the read value.
+ * @return analog reading from multiplexer in input channel.
+*/
 int potentiometer::readMux(int channel){
   int controlPin[] = {s0, s1, s2, s3};
 
@@ -108,7 +107,10 @@ float potentiometer::getAngle(){
 }
 
 
-// Calibrates the potentiometer, either the minimum or maximum angle state depending on input
+/**
+ * Calibrates the potentiometer, either the min or  max state depending on input.
+ * @return void
+*/
 void potentiometer::calibrate(bool state){
   if(multipl){
     for(int i = 0; i < 2*SAMPLES; i++){
@@ -131,12 +133,16 @@ void potentiometer::calibrate(bool state){
     
 }
 
-// Returns calibrateMax variable
+/**
+ * @returns value of calibrateMax
+*/
 int potentiometer::getCalibrateMax(){
   return calibrateMax;
 }
 
-// Returns calibrateMin variable
+/**
+ * @returns value of calibrateMin
+*/
 int potentiometer::getCalibrateMin(){
   return calibrateMin;
 }
