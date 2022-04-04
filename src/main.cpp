@@ -5,29 +5,13 @@
 #include "potentiometer.h"
 #include "display.h"
 
-
-/*
-const uint8_t thumbIP_Pin = ads1118.AIN_0;
-const uint8_t thumbMCP_Pin =  ads1118.AIN_1;
-const uint8_t f1PIP_Pin =  ads1118.AIN_2;			
-const uint8_t f1MCP_Pin = ads1118.AIN_3;			
-const int f2PIP_Pin = 36;
-const int f2MCP_Pin = 39;
-const int f3PIP_Pin = 32;
-const int f3MCP_Pin = 33;
-const int f4PIP_Pin = 34;
-const int f4MCP_Pin = 35;
-const int pinList[] = {thumbIP_Pin, thumbMCP_Pin, f1PIP_Pin, f1MCP_Pin, f2PIP_Pin, f2MCP_Pin, f3PIP_Pin, f3MCP_Pin, f4PIP_Pin, f4MCP_Pin};
-const int sizeList = sizeof(pinList)/sizeof(int);
-float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
 int sendID = 0;
-*/
-
 
 int buttonRun = 0;
 int state = 0;
 int calibrateState = 0;
 
+// Declaring all flexSensor objects
 flexSensor thumbIP = flexSensor(0);
 flexSensor thumbMCP = flexSensor(1);
 flexSensor f1PIP = flexSensor(2);
@@ -38,14 +22,18 @@ flexSensor f3PIP = flexSensor(6);
 flexSensor f3MCP = flexSensor(7);
 flexSensor f4PIP = flexSensor(8);
 flexSensor f4MCP = flexSensor(9);
+
+// Declaring all potentiometer objects
 potentiometer f1AD = potentiometer(10);
 potentiometer f2AD = potentiometer(11);
 potentiometer f3AD = potentiometer(12);
 potentiometer f4AD = potentiometer(13);
 
+// Creating list of flexSensor and list of potetiometer objects
 flexSensor pinList[] = {thumbIP, thumbMCP, f1PIP, f1MCP, f2PIP, f2MCP, f3PIP, f3MCP, f4PIP, f4MCP};
 potentiometer potList[4] = {f1AD,f2AD,f3AD,f4AD};
 const int sizeList = sizeof(pinList)/sizeof(int);
+// List of angles of all joints in fingers
 float fingerAngles[14] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
  // Initiates the multiplexer.
@@ -61,6 +49,9 @@ void initBoard(){
   digitalWrite(s3, LOW);
 }
 
+/*
+ *  Takes in a given channel number and outputs a multiplexer reading from that given channel.
+ */
 int readMux(int channel){
   int controlPin[] = {s0, s1, s2, s3};
 

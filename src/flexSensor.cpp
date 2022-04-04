@@ -15,36 +15,34 @@
  * @param maximum_angle the maximum angle of flex sensor.
  * @param multipl boolean that states whether the flex sensor is connected to the multiplexer or directly to the esp32.
 */
-
 flexSensor::flexSensor(int channel, int minimum_angle, int maximum_angle){
     multipl = true;
     m_channel = channel;
     min_angle = minimum_angle;
     max_angle = maximum_angle;
 }
-
 flexSensor::flexSensor(int channel){
     multipl = true;
     m_channel = channel;
     min_angle = 0;
     max_angle = 90;
 }
-
 flexSensor::flexSensor(bool multiplexer, int pin, int minimum_angle, int maximum_angle){
     multipl = multiplexer;
     m_channel = pin;
     min_angle = minimum_angle;
     max_angle = maximum_angle;
 }
-
 flexSensor::flexSensor(bool multiplexer, int pin){
     multipl = multiplexer;
     m_channel = pin;
     min_angle = 0;
     max_angle = 90;
 }
-
-// Changes multiplexer to read from int channel and then returns the read value
+/**
+ * Changes multiplexer to read from int channel and then returns the read value.
+ * @return analog reading from multiplexer in input channel.
+*/
 int flexSensor::readMux(int channel){
   int controlPin[] = {s0, s1, s2, s3};
 
@@ -106,8 +104,10 @@ float flexSensor::getAngle(){
   return m_f.getMedian();
 }
 
-
-// Calibrates the flex sensor, either the open or closed state depending on input
+/**
+ * Calibrates the flex sensor, either the open or closed state depending on input
+ * @return void
+*/
 void flexSensor::calibrate(bool state){
 
   if(multipl){
@@ -128,13 +128,16 @@ void flexSensor::calibrate(bool state){
     calibrateClosed = m_f.getMedian();
   }
 }
-
-// returns value of calibrateClosed
+/**
+ * @returns value of calibrateClosed
+*/
 int flexSensor::getCalibrateClosed(){
   return calibrateClosed;
 }
 
-// returns value of calibrateOpen
+/**
+ * @returns value of calibrateOpen
+*/
 int flexSensor::getCalibrateOpen(){
   return calibrateOpen;
 }
