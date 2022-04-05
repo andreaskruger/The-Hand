@@ -71,7 +71,7 @@ void setup_mpu_6050_registers() {
  
 void setup() {
   // Start
-  Wire.begin();
+  Wire.begin(21,22,100000);
   Serial.begin(115200);
  
   // Setup the registers of the MPU-6050 and start up
