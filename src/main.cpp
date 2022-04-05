@@ -93,6 +93,7 @@ void interuptCalibrate(){
   static unsigned long last_interuptTime = 0;
   unsigned long interupt_time = millis();
   if((interupt_time - last_interuptTime) > 200){
+    Serial.println("PUSH");
     calibrateState++;
   }
   last_interuptTime = interupt_time;

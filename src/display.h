@@ -1,3 +1,6 @@
+/*
+ * This header file is for seting up the LCD-display and creating methods to easily control the display from the main class.
+ */
 #include <Arduino.h>
 #include <Arduino_GFX_Library.h>
 #include "FreeMono12pt7b.h"

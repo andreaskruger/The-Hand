@@ -1,6 +1,6 @@
 /*
- * THIS FILE 
- */
+ * This is a library for the LCD-display which enables it to output text. 
+*/
 #ifndef FreeMono12pt7b_H
 #define FreeMono12pt7b_H
 

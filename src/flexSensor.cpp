@@ -39,6 +39,7 @@ flexSensor::flexSensor(bool multiplexer, int pin){
     min_angle = 0;
     max_angle = 90;
 }
+
 /**
  * Changes multiplexer to read from int channel and then returns the read value.
  * @return analog reading from multiplexer in input channel.

@@ -1,6 +1,6 @@
 /**
  * This class file is used to create potentiometer objects that handle all reading
- * and filtering of each sensor signal.cha
+ * and filtering of each sensor signal.
 */
 
 #include <Arduino.h>
