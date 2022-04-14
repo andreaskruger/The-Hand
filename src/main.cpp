@@ -10,9 +10,13 @@ int sendID = 0;
 int buttonRun = 0;
 int state = 0;
 int calibrateState = 0;
+int8_t disp_row_number;
+
+// test
+flexSensor thumbIP = flexSensor(false,27);
 
 // Declaring all flexSensor objects
-flexSensor thumbIP = flexSensor(0);
+//flexSensor thumbIP = flexSensor(0);
 flexSensor thumbMCP = flexSensor(1);
 flexSensor f1PIP = flexSensor(2);
 flexSensor f1MCP = flexSensor(3);
@@ -129,6 +133,7 @@ void display_angle(flexSensor sensor){
 /*Calibrates all 10 flex sensors for flexion movement. First hold hand open until OK 
   is printed and then have hand closed until OK is printed again */
 void calibrateFlexion(){
+  disp_clr();
   attachInterrupt(16,interuptCalibrate,RISING);
   Serial.println("Flexion Calibr.");
   disp_clr();
@@ -140,6 +145,7 @@ void calibrateFlexion(){
   while(calibrateState < 1){delay(50);}
   for(int i = 0; i<10 ; i++){
     pinList[i].calibrate(false);
+    Serial.println(pinList[i].getCalibrateOpen());
   }
   Serial.println("OK");
   disp_setTextColor(GREEN);
@@ -152,6 +158,7 @@ void calibrateFlexion(){
   while(calibrateState < 2){delay(50);}
   for(int i = 0; i<10 ; i++){
     pinList[i].calibrate(true);
+    Serial.println(pinList[i].getCalibrateClosed());
   }
   Serial.println("OK");
   disp_setTextColor(GREEN);
@@ -172,6 +179,7 @@ void calibrateFlexion(){
    Each finger is calibrated individually with instructions printed on the display */
 void calibrateAbduction(){
   attachInterrupt(16,interuptCalibrate,RISING);
+  disp_clr();
   for(int i = 0; i < sizeof(potList)/sizeof(potList[i]); i++){
     disp_clr();
     disp_setTextColor(WHITE);
@@ -227,18 +235,28 @@ void setup() {
   // init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board        
   disp_initialize();                       // Initialise display
-  attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
+  //attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
   calibrateFlexion();                       // Calibrate flextion movement of fingers
-  calibrateAbduction();                     // Calibrate abduction and adduction movement of fingers
+  //calibrateAbduction();                     // Calibrate abduction and adduction movement of fingers
+
+  disp_row_number = 0;
 }
 
 void loop() {
-
   /*
   sendID++;
 
   send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
   */
+  Serial.print(thumbIP.getValue());
+  Serial.print("  ::  ");
+  Serial.println(pinList[0].getAngle());
+  disp_println(pinList[0].getAngle());
 
+  disp_row_number ++;
+  if(disp_row_number >= 9){
+      disp_clr();
+      disp_row_number = 0;
+  }
 }
 

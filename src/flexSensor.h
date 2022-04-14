@@ -35,4 +35,6 @@ public:
     void calibrate(bool state);
     int getCalibrateOpen();
     int getCalibrateClosed();
+    void setCalibrateOpen(int value);
+    void setCalibrateClosed(int value);
 };
