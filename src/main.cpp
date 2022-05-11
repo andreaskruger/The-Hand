@@ -113,8 +113,10 @@ void interuptFunc(){
       buttonRun = 1;
       state = 1;
     }
+    Serial.println("Button");
   }
   last_interuptTime = interupt_time;
+  
 }
 
 void display_angle(potentiometer sensor){
@@ -129,7 +131,7 @@ void display_angle(flexSensor sensor){
 /*Calibrates all 10 flex sensors for flexion movement. First hold hand open until OK 
   is printed and then have hand closed until OK is printed again */
 void calibrateFlexion(){
-  attachInterrupt(16,interuptCalibrate,RISING);
+  attachInterrupt(INTERUPT_PIN,interuptCalibrate,RISING);
   Serial.println("Flexion Calibr.");
   disp_clr();
   disp_setTextColor(WHITE);
@@ -165,17 +167,18 @@ void calibrateFlexion(){
   while(calibrateState < 3){delay(50);}
   calibrateState = 0;
   disp_clr();
-  attachInterrupt(17,interuptFunc,HIGH);
+  attachInterrupt(INTERUPT_PIN,interuptFunc,HIGH);
 }
 
 /* Calibrates potentiometers for measuring abduction and adduction of fingers.
    Each finger is calibrated individually with instructions printed on the display */
 void calibrateAbduction(){
-  attachInterrupt(16,interuptCalibrate,RISING);
+  attachInterrupt(INTERUPT_PIN,interuptCalibrate,RISING);
   for(int i = 0; i < sizeof(potList)/sizeof(potList[i]); i++){
     disp_clr();
     disp_setTextColor(WHITE);
     disp_println("Abduct. Calibr.");
+    delay(500);
     disp_println("----------------");
     disp_print("keep F");
     disp_print(i+1);
@@ -217,7 +220,7 @@ void calibrateAbduction(){
   while(calibrateState < 3){delay(50);}
   calibrateState = 0;
   disp_clr();
-  attachInterrupt(17,interuptFunc,HIGH);
+  attachInterrupt(INTERUPT_PIN,interuptFunc,HIGH);
 }
 
 void setup() {
@@ -227,17 +230,79 @@ void setup() {
   // init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board        
   disp_initialize();                       // Initialise display
-  attachInterrupt(17, interuptFunc, HIGH); // interupt for start/stop button
-  calibrateFlexion();                       // Calibrate flextion movement of fingers
-  calibrateAbduction();                     // Calibrate abduction and adduction movement of fingers
+  pinMode(INTERUPT_PIN,INPUT);
+  attachInterrupt(INTERUPT_PIN, interuptFunc, RISING); // interupt for start/stop button
+  //calibrateFlexion();                       // Calibrate flextion movement of fingers
+  //alibrateAbduction();                     // Calibrate abduction and adduction movement of fingers
 }
 
 void loop() {
+  //Serial.print("PIP 1:");
+  //Serial.println(readMux(0));
+  //Serial.print("MCP 1:");
+  //Serial.println(readMux(1));
+  //Serial.print("PIP 2:");
+  //Serial.println(readMux(2));
+  //Serial.print("MCP 3:");
+  ///Serial.println(readMux(3));
+  //Serial.print("PIP3 :");
+  //Serial.println(readMux(4));
+  //Serial.print("MCP4 :");
+  //Serial.println(readMux(5));
+  //Serial.print("PIP4 :");
+  //Serial.println(readMux(6));
+  //Serial.print("MCP4 :");
+  //Serial.println(readMux(7));
+  //Serial.print("Tomt :");
+  //Serial.println(readMux(8));
+  //Serial.print("TOMT :");
+  //Serial.println(readMux(9));
+  //Serial.print("Tomt :");
+  //Serial.println(readMux(10));
+  //Serial.print("ev pot :");
+  //Serial.println(readMux(11));
+  //Serial.print("ev pot :");
+  //Serial.println(readMux(12));
+  //Serial.print("ev pot :");
+  //Serial.println(readMux(13));
+  //Serial.print("ev pot :");
+  //Serial.println(readMux(14));
+  //Serial.print("ev pot :");
+  //Serial.println(readMux(15));
+  //Serial.print("MCP4 :");
+  //Serial.println(readMux(16));
 
+  delay(100);
+  //f1PIP.getAngle();
+
+  //Serial.print(readMux(3));
+  //Serial.write(13);
+  //Serial.write(10);
   /*
   sendID++;
 
-  send(sendID, fingerAngles[0], fingerAngles[1], fingerAngles[2], fingerAngles[3], fingerAngles[4], fingerAngles[5], fingerAngles[6], fingerAngles[7], fingerAngles[8], fingerAngles[9]);
+  send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2MCP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
+  //send(sendID, getAngle(pinList[0],0,0),getAngle(pinList[1],1,1),getAngle(pinList[2],2,2),getAngle(pinList[3],3,3),getAngle(pinList[4],4,4),getAngle(pinList[5],5,5),getAngle(pinList[6],6,6),getAngle(pinList[7],7,7),getAngle(pinList[8],8,8),getAngle(pinList[9],9,9));
+  /*
+  Serial.print(mf_thumbIP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_thumbMCP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f1PIP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f1MCP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f2PIP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f2MCP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f3PIP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f3MCP.getMedian());
+  Serial.print(" ");
+  Serial.print(mf_f4PIP.getMedian());
+  Serial.print(" ");
+  Serial.println(mf_f4MCP.getMedian());
   */
 
 }
