@@ -2,7 +2,14 @@
 #include <readFingers.h>
 #include <talkyBoi.h>
 
-#define interuptPin 16
+#define interuptPin 17
+#define SIG_PIN 36
+#define s0  26
+#define s1  27
+#define s2  14
+#define s3  12
+
+
 
 // Pin connected to voltage divider output. used for analogRead to get resistance of the flexsensors
 const uint8_t thumbIP_Pin = ads1118.AIN_1;
@@ -18,6 +25,7 @@ const int f4MCP_Pin = 34;
 const int pinList[] = {thumbIP_Pin, thumbMCP_Pin, f1PIP_Pin, f1MCP_Pin, f2PIP_Pin, f2MCP_Pin, f3PIP_Pin, f3MCP_Pin, f4PIP_Pin, f4MCP_Pin};
 const int sizeList = sizeof(pinList)/sizeof(int);
 float fingerAngles[10] = {0,0,0,0,0,0,0,0,0,0};
+
 
 int sendID = 0;
 
@@ -174,7 +182,13 @@ void loop() {
 
   send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2MCP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
   //send(sendID, getAngle(pinList[0],0,0),getAngle(pinList[1],1,1),getAngle(pinList[2],2,2),getAngle(pinList[3],3,3),getAngle(pinList[4],4,4),getAngle(pinList[5],5,5),getAngle(pinList[6],6,6),getAngle(pinList[7],7,7),getAngle(pinList[8],8,8),getAngle(pinList[9],9,9));
- 
+  
+
+  digitalWrite(s0,HIGH);
+  digitalWrite(s1,HIGH);
+  digitalWrite(s2,HIGH);
+  digitalWrite(s3,HIGH);
+  analogRead(SIG_PIN);
  /*
   Serial.print(mf_thumbIP.getMedian());
   Serial.print(" ");
