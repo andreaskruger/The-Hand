@@ -118,7 +118,7 @@ void setup() {
   init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board 
   initAnalogPin();                         // Initiate analog pins on ESP 
-
+/*
   Serial.println("Wating for calibration...");
   attachInterrupt(16,interuptCalibrate,RISING); //Interupt for calibration, start with open hand
   while(setupState<1){delay(10);}               //Hold hand open to calibrate flexsensors for an open hand
@@ -147,7 +147,7 @@ void setup() {
       }
       calibrate(calibrateFilter.getMedian(), i, 2);           //Located in readFingers, takes a pin, type(breakoutboard or ESP), pos which is the position in                                                               
   }                                                             //calibrate array and state(open 1 and closed 2)
-
+*/
   Serial.println("Calibrate 2: done");
   //delay(5000);
   Serial.print("Calibrating");
@@ -160,12 +160,12 @@ void setup() {
   Serial.println("Calibration done!");
   detachInterrupt(16);
   delay(10);
-  attachInterrupt(16, interuptFunc, RISING); // interupt for start/stop button
+  attachInterrupt(17, interuptFunc, RISING); // interupt for start/stop button
 }
 
 void loop() {
   while(state){delay(10);}                                             //interupt for pin 16 button
-
+  /*
   mf_thumbIP.addSample(getAngle(pinList[0], 0, 0));
   mf_thumbMCP.addSample(getAngle(pinList[1], 1, 1));;
   mf_f1PIP.addSample(getAngle(pinList[2], 2, 2));;			
@@ -176,7 +176,7 @@ void loop() {
   mf_f3MCP.addSample(getAngle(pinList[7], 7, 7));;
   mf_f4PIP.addSample(getAngle(pinList[8], 8, 8));;
   mf_f4MCP.addSample(getAngle(pinList[9], 9, 9));;
-  
+  */
   
   sendID++;
 
@@ -188,7 +188,11 @@ void loop() {
   digitalWrite(s1,HIGH);
   digitalWrite(s2,HIGH);
   digitalWrite(s3,HIGH);
-  analogRead(SIG_PIN);
+  
+  mf_f1PIP.addSample(getAngle(SIG_PIN, 4, 4));
+  Serial.print(mf_f1PIP.getMedian());
+  Serial.write(13);
+  Serial.write(10);
  /*
   Serial.print(mf_thumbIP.getMedian());
   Serial.print(" ");
