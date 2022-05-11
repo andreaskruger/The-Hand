@@ -142,3 +142,11 @@ int flexSensor::getCalibrateClosed(){
 int flexSensor::getCalibrateOpen(){
   return calibrateOpen;
 }
+
+void flexSensor::setCalibrateClosed(int value){
+  calibrateClosed = value;
+}
+
+void flexSensor::setCalibrateOpen(int value){
+  calibrateOpen = value;
+}
