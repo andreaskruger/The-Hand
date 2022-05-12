@@ -34,7 +34,7 @@ int state = 0;
 
 // Number of samples for the median filter.
 // More samples => larger delay
-const int SAMPLE_WINDOW = 7;
+const int SAMPLE_WINDOW = 10;
 
 // filter objects for all joints
 MedianFilter<int, SAMPLE_WINDOW> mf_thumbIP;
@@ -148,7 +148,7 @@ void setup() {
       calibrate(calibrateFilter.getMedian(), i, 2);           //Located in readFingers, takes a pin, type(breakoutboard or ESP), pos which is the position in                                                               
   }                                                             //calibrate array and state(open 1 and closed 2)
 */
-  Serial.println("Calibrate 2: done");
+  /*Serial.println("Calibrate 2: done");
   //delay(5000);
   Serial.print("Calibrating");
   Serial.print(". ");
@@ -157,7 +157,7 @@ void setup() {
   delay(300);
   Serial.println(". ");
   delay(300);
-  Serial.println("Calibration done!");
+  Serial.println("Calibration done!");*/
   detachInterrupt(16);
   delay(10);
   attachInterrupt(17, interuptFunc, RISING); // interupt for start/stop button
@@ -184,10 +184,10 @@ void loop() {
   //send(sendID, getAngle(pinList[0],0,0),getAngle(pinList[1],1,1),getAngle(pinList[2],2,2),getAngle(pinList[3],3,3),getAngle(pinList[4],4,4),getAngle(pinList[5],5,5),getAngle(pinList[6],6,6),getAngle(pinList[7],7,7),getAngle(pinList[8],8,8),getAngle(pinList[9],9,9));
   
 
-  digitalWrite(s0,HIGH);
-  digitalWrite(s1,HIGH);
-  digitalWrite(s2,HIGH);
-  digitalWrite(s3,HIGH);
+  digitalWrite(s0,LOW);
+  digitalWrite(s1,LOW);
+  digitalWrite(s2,LOW);
+  digitalWrite(s3,LOW);
   
   mf_f1PIP.addSample(getAngle(SIG_PIN, 4, 4));
   Serial.print(mf_f1PIP.getMedian());

@@ -52,7 +52,7 @@ float readResistance(int pin, int type){    // 0<=type<4 -> on multiplexer, 4=<t
 
 int getAngle(int pin, int type, int pos){
     int angle = readResistance(pin, type); 
-    angle = map(angle,20000,60000,0,90);
+    angle = map(angle,10000,90000,0,90);
     return angle;
 }
 void calibrate(int calibratedValue, int pos, int state){
