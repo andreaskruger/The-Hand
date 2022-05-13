@@ -19,7 +19,7 @@
 #define DISP_MOSI 23
 
 // Number of samples for the median filter
-const int SAMPLES = 20;
+const int SAMPLES = 7;
 
 // Pin to the push button that turns the controller on
 #define INTERUPT_PIN 17

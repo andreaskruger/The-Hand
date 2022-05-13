@@ -35,4 +35,6 @@ public:
     void calibrate(bool state);
     int getCalibrateMin();
     int getCalibrateMax();
+    void setCalibrateMax(int val);
+    void setCalibrateMin(int val);
 };

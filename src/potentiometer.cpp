@@ -147,3 +147,17 @@ int potentiometer::getCalibrateMax(){
 int potentiometer::getCalibrateMin(){
   return calibrateMin;
 }
+
+/**
+ * sets value of calibrateMax
+*/
+void potentiometer::setCalibrateMax(int val){
+  calibrateMax = val;
+}
+
+/**
+ * sets value of calibrateMin
+*/
+void potentiometer::setCalibrateMin(int val){
+  calibrateMin = val;
+}
