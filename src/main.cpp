@@ -172,6 +172,10 @@ void calibrateFlexion(){
 
 /* Calibrates potentiometers for measuring abduction and adduction of fingers.
    Each finger is calibrated individually with instructions printed on the display */
+/*Change calibration for abduction and adduction potentiometers 
+By calibrating a "middle value" and theneither add a value +- to that middle value.
+or calibrate a motion to one side and then mirror that motion to the otehr side.*/
+
 void calibrateAbduction(){
   attachInterrupt(INTERUPT_PIN,interuptCalibrate,RISING);
   for(int i = 0; i < sizeof(potList)/sizeof(potList[i]); i++){
