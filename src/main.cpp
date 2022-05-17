@@ -266,7 +266,8 @@ void setup() {
   disp_initialize();                       // Initialise display
   pinMode(INTERUPT_PIN,INPUT);
   // interupt for start/stop button
-  //calibrateFlexion();                       // Calibrate flextion movement of fingers
+  calibrateFlexion();
+  calibrateAbduction2();                       // Calibrate flextion movement of fingers
   //calibrateAbduction();                     // Calibrate abduction and adduction movement of fingers
 
   attachInterrupt(INTERUPT_PIN, interuptFunc, RISING);
@@ -348,13 +349,16 @@ void loop() {
   Serial.print(pinList[8].getAngle());
   Serial.print(",");
   Serial.print(pinList[9].getAngle());
+  Serial.print(",");*/
+  //Serial.print(pinList[10].getAngle());
+  Serial.print(",");  
+  Serial.print(potList[0].getAngle());
   Serial.print(",");
   Serial.print(potList[1].getAngle());
   Serial.print(",");
   Serial.print(potList[2].getAngle());
   Serial.print(",");
-  Serial.println(potList[3].getAngle());*/
-  Serial.println(potList[4].getValue());
+  Serial.println(potList[3].getAngle());
 
 delay(40);
 }
