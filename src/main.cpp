@@ -227,6 +227,34 @@ void calibrateAbduction(){
   detachInterrupt(INTERUPT_PIN);
 }
 
+void calibrateAbduction2(){
+  attachInterrupt(INTERUPT_PIN,interuptCalibrate,RISING);
+  
+  Serial.println("Put hand in neutral position");
+  while(calibrateState < 1){delay(50);}
+  int pot0_mean = potList[0].getValue();
+  int pot1_mean = potList[1].getValue();
+  int pot2_mean = potList[2].getValue();
+  int pot3_mean = potList[3].getValue();
+  Serial.println("DONE");
+  delay(100);
+
+  Serial.println("Put hand in abducted position");
+  while(calibrateState < 2){delay(50);}
+  potList[0].calibrate(false);
+  potList[1].calibrate(false);
+  potList[2].calibrate(true);
+  potList[3].calibrate(true);
+
+  potList[0].setCalibrateMax(2*pot0_mean - potList[0].getCalibrateMin());
+  potList[0].setCalibrateMax(2*pot0_mean - potList[0].getCalibrateMin());
+  potList[0].setCalibrateMin(2*pot0_mean - potList[0].getCalibrateMax());
+  potList[0].setCalibrateMin(2*pot0_mean - potList[0].getCalibrateMax());
+  Serial.println("Calibration complete");
+  calibrateState = 0;
+  detachInterrupt(INTERUPT_PIN);
+}
+
 void setup() {
   Serial.begin(115200);
   delay(100);
