@@ -22,16 +22,18 @@ flexSensor f3PIP = flexSensor(6);
 flexSensor f3MCP = flexSensor(7);
 flexSensor f4PIP = flexSensor(8);
 flexSensor f4MCP = flexSensor(9);
+flexSensor opposition = flexSensor(10);
 
 // Declaring all potentiometer objects
-potentiometer f1AD = potentiometer(10);
-potentiometer f2AD = potentiometer(11);
-potentiometer f3AD = potentiometer(12);
-potentiometer f4AD = potentiometer(13);
+potentiometer f1AD = potentiometer(11);
+potentiometer f2AD = potentiometer(12);
+potentiometer f3AD = potentiometer(13);
+potentiometer f4AD = potentiometer(14);
+potentiometer tAD = potentiometer(15);
 
 // Creating list of flexSensor and list of potetiometer objects
-flexSensor pinList[] = {thumbIP, thumbMCP, f1PIP, f1MCP, f2PIP, f2MCP, f3PIP, f3MCP, f4PIP, f4MCP};
-potentiometer potList[4] = {f1AD,f2AD,f3AD,f4AD};
+flexSensor pinList[] = {thumbIP, thumbMCP, f1PIP, f1MCP, f2PIP, f2MCP, f3PIP, f3MCP, f4PIP, f4MCP, opposition};
+potentiometer potList[5] = {f1AD,f2AD,f3AD,f4AD,tAD};
 const int sizeList = sizeof(pinList)/sizeof(int);
 // List of angles of all joints in fingers
 float fingerAngles[14] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -236,7 +238,7 @@ void setup() {
   disp_initialize();                       // Initialise display
   pinMode(INTERUPT_PIN,INPUT);
   // interupt for start/stop button
-  calibrateFlexion();                       // Calibrate flextion movement of fingers
+  //calibrateFlexion();                       // Calibrate flextion movement of fingers
   //calibrateAbduction();                     // Calibrate abduction and adduction movement of fingers
 
   attachInterrupt(INTERUPT_PIN, interuptFunc, RISING);
@@ -299,7 +301,7 @@ void loop() {
   //send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2MCP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
   //send(sendID, getAngle(pinList[0],0,0),getAngle(pinList[1],1,1),getAngle(pinList[2],2,2),getAngle(pinList[3],3,3),getAngle(pinList[4],4,4),getAngle(pinList[5],5,5),getAngle(pinList[6],6,6),getAngle(pinList[7],7,7),getAngle(pinList[8],8,8),getAngle(pinList[9],9,9));
   int currentTime = millis();
-  Serial.print(pinList[0].getAngle());
+  /*Serial.print(pinList[0].getAngle());
   Serial.print(",");
   Serial.print(pinList[1].getAngle());
   Serial.print(",");
@@ -323,7 +325,8 @@ void loop() {
   Serial.print(",");
   Serial.print(potList[2].getAngle());
   Serial.print(",");
-  Serial.println(potList[3].getAngle());
+  Serial.println(potList[3].getAngle());*/
+  Serial.println(potList[4].getValue());
 
 delay(40);
 }
