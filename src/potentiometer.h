@@ -19,6 +19,7 @@ private:
     int max_angle;
     int calibrateMin;
     int calibrateMax;
+    int calibrateM;
     bool multipl;
     // Number of samples are defined in config.h
     MedianFilter<float, SAMPLES> m_f;
@@ -37,4 +38,5 @@ public:
     int getCalibrateMax();
     void setCalibrateMax(int val);
     void setCalibrateMin(int val);
+    void calibrateMean();
 };

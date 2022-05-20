@@ -21,24 +21,28 @@ potentiometer::potentiometer(int channel, int minimum_angle, int maximum_angle){
   m_channel = channel;
   min_angle = minimum_angle;
   max_angle = maximum_angle;
+  calibrateM = 0;
 }
 potentiometer::potentiometer(int channel){
   multipl =  true;
   m_channel = channel;
   min_angle = -15;
   max_angle = 15;
+  calibrateM = 0;
 }
 potentiometer::potentiometer(bool multiplexer, int pin, int minimum_angle, int maximum_angle){
   multipl = multiplexer;
   m_channel = pin;
   min_angle = minimum_angle;
   max_angle = maximum_angle;
+  calibrateM = 0;
 }
 potentiometer::potentiometer(bool multiplexer, int pin){
   multipl = multiplexer;
   m_channel = pin;
   min_angle = -15;
   max_angle = 15;
+  calibrateM = 0;
 }
 
 /**
@@ -160,4 +164,13 @@ void potentiometer::setCalibrateMax(int val){
 */
 void potentiometer::setCalibrateMin(int val){
   calibrateMin = val;
+}
+
+void potentiometer::calibrateMean(int delta_min, int delta_max){
+  for(int i = 0; i < 2*SAMPLES; i++){
+    m_f.addSample(readMux(m_channel));
+  }
+  calibrateM = m_f.getMedian();
+  calibrateMin = calibrateMax - delta_min;
+  calibrateMax = calibrateMin - delta_max;
 }
