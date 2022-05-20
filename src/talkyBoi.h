@@ -116,7 +116,6 @@ void init_wifi(){
  * Call this function from main when a message over wifi should be sent.
  */
 void send(float sendID, float thumbIP, float thumbMCP, float finger1PIP, float finger1MCP, float finger2PIP, float finger2MCP, float finger3PIP, float finger3MCP, float finger4PIP, float finger4MCP,float opposition,float pot1,float pot2,float pot3,float pot4){
-  uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8};
   msg_to_send.sendID = sendID;
   msg_to_send.thumbIP = thumbIP;
   msg_to_send.thumbMCP = thumbMCP;

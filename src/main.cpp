@@ -261,7 +261,7 @@ void setup() {
   Serial.begin(115200);
   delay(100);
   // getMACAdress();                          //MAC adress is run for the WIFI to work, the OTHER wearers MAC adress shall be written in this code and vice versa.
-  // init_wifi();                             // Initiate ESP_NOW
+  init_wifi();                             // Initiate ESP_NOW
   initBoard();                             // Initiate breakout board        
   disp_initialize();                       // Initialise display
   pinMode(INTERUPT_PIN,INPUT);
