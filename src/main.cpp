@@ -267,7 +267,7 @@ void setup() {
   pinMode(INTERUPT_PIN,INPUT);
   // interupt for start/stop button
   calibrateFlexion();
-  calibrateAbduction2();                       // Calibrate flextion movement of fingers
+  //calibrateAbduction2();                       // Calibrate flextion movement of fingers
   //calibrateAbduction();                     // Calibrate abduction and adduction movement of fingers
 
   attachInterrupt(INTERUPT_PIN, interuptFunc, RISING);
@@ -282,43 +282,7 @@ void setup() {
 
 
 void loop() {
-  //Serial.print("PIP 1:");
-  //Serial.println(readMux(0));
-  //Serial.print("MCP 1:");
-  //Serial.println(readMux(1));
-  //Serial.print("PIP 2:");
-  //Serial.println(readMux(2));
-  //Serial.print("MCP 2:");
-  //Serial.println(readMux(3));
-  //Serial.print("PIP3 :");
-  //Serial.println(readMux(4));
-  //Serial.print("MCP3 :");
-  //Serial.println(readMux(5));
-  //Serial.print("PIP4 :");
-  //Serial.println(readMux(6));
-  //Serial.print("MCP4 :");
-  //Serial.println(readMux(7));
-  //Serial.print("tumme PIP :");
-  //Serial.println(readMux(8));
-  //Serial.print("tumme MCP :");
-  //Serial.println(readMux(9));
-  //Serial.print("Tomt :");
-  //Serial.println(readMux(10));
-  //Serial.print("pot 1:");
-  //Serial.println(readMux(11));
-  //Serial.print("pot 2:");
-  //Serial.println(readMux(12));
-  //Serial.print("pot :3");
-  //Serial.println(readMux(13));
-  //Serial.print("pot 4:");
-  //Serial.println(readMux(14));
 
-  /*
-  Serial.print("ev pot :");
-  Serial.println(readMux(15));
-  Serial.print("tomt :");
-  Serial.println(readMux(16));
-  */
 
   //Serial.println(readMux(11));
   //Serial.print(potList[1].getAngle());
@@ -326,10 +290,8 @@ void loop() {
   //Serial.write(10);
   
   //sendID++;
-
-  //send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2MCP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
   //send(sendID, getAngle(pinList[0],0,0),getAngle(pinList[1],1,1),getAngle(pinList[2],2,2),getAngle(pinList[3],3,3),getAngle(pinList[4],4,4),getAngle(pinList[5],5,5),getAngle(pinList[6],6,6),getAngle(pinList[7],7,7),getAngle(pinList[8],8,8),getAngle(pinList[9],9,9));
-  int currentTime = millis();
+
   /*Serial.print(pinList[0].getAngle());
   Serial.print(",");
   Serial.print(pinList[1].getAngle());
@@ -352,13 +314,13 @@ void loop() {
   Serial.print(",");*/
   //Serial.print(pinList[10].getAngle());
   Serial.print(",");  
-  Serial.print(potList[0].getAngle());
+  Serial.print(potList[2].getValue());
   Serial.print(",");
-  Serial.print(potList[1].getAngle());
+ // Serial.print(potList[1].getAngle());
+  //Serial.print(",");
+  //Serial.print(potList[2].getAngle());
   Serial.print(",");
-  Serial.print(potList[2].getAngle());
-  Serial.print(",");
-  Serial.println(potList[3].getAngle());
+  //Serial.println(potList[3].getAngle());
 
 delay(40);
 }
