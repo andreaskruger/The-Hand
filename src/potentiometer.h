@@ -38,5 +38,5 @@ public:
     int getCalibrateMax();
     void setCalibrateMax(int val);
     void setCalibrateMin(int val);
-    void calibrateMean();
+    void calibrateMean(int delta_min, int delta_max);
 };

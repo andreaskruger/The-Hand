@@ -16,8 +16,8 @@
 #include <esp_now.h>
 #include "Config.h"
 
-//uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE6,0x79,0x9C}; //MAC-adress black tape
-uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8}; //MAC-adress silver tape
+uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE6,0x79,0x9C}; //MAC-adress black tape
+//uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8}; //MAC-adress silver tape
 //uint8_t broadcastAdress[] = {0x7C,0x9E,0xBD,0x60,0xD1,0x8C}; //MAC masking tape
 //uint8_t broadcastAdressModel[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4}; //MAC white tape
 
@@ -42,6 +42,11 @@ typedef struct struct_message{
   float finger2Po;
   float finger3Po;
   float finger4Po;
+  float opposition;
+  float pot1;
+  float pot2;
+  float pot3;
+  float pot4;
 }struct_message;
  
 struct_message msg_to_send;
@@ -50,18 +55,6 @@ struct_message msg_incoming;
 // Callback when data is sent, triggerd when message is sent
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
     Serial.print("\r\nLast Packet Send Status:\t");
-    //Serial.write((String)mac_addr));
-    Serial.print(mac_addr[0], HEX);
-    Serial.print(",");
-    Serial.print(mac_addr[1], HEX);
-    Serial.print(",");
-    Serial.print(mac_addr[2], HEX);
-    Serial.print(",");
-    Serial.print(mac_addr[3], HEX);
-    Serial.print(",");
-    Serial.print(mac_addr[4], HEX);
-    Serial.print(",");
-    Serial.println(mac_addr[5], HEX);
     Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
     if(status == ESP_NOW_SEND_FAIL){
       error++;
@@ -122,7 +115,7 @@ void init_wifi(){
  * The rest of the arguments is values in the form of angles(already filterd and proccssed).
  * Call this function from main when a message over wifi should be sent.
  */
-void send(float sendID, float thumbIP, float thumbMCP, float finger1PIP, float finger1MCP, float finger2PIP, float finger2MCP, float finger3PIP, float finger3MCP, float finger4PIP, float finger4MCP){
+void send(float sendID, float thumbIP, float thumbMCP, float finger1PIP, float finger1MCP, float finger2PIP, float finger2MCP, float finger3PIP, float finger3MCP, float finger4PIP, float finger4MCP,float opposition,float pot1,float pot2,float pot3,float pot4){
   uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8};
   msg_to_send.sendID = sendID;
   msg_to_send.thumbIP = thumbIP;
@@ -135,6 +128,11 @@ void send(float sendID, float thumbIP, float thumbMCP, float finger1PIP, float f
   msg_to_send.finger3MCP = finger3MCP;
   msg_to_send.finger4PIP = finger4PIP;
   msg_to_send.finger4MCP = finger4MCP;
+  msg_to_send.opposition = opposition;
+  msg_to_send.pot1 = pot1;
+  msg_to_send.pot2 = pot2;
+  msg_to_send.pot3 = pot3;
+  msg_to_send.pot4 = pot4;
 
   esp_err_t result = esp_now_send(broadcastAdress, (uint8_t *) &msg_to_send, sizeof(msg_to_send));
 }

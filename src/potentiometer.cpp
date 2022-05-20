@@ -26,8 +26,8 @@ potentiometer::potentiometer(int channel, int minimum_angle, int maximum_angle){
 potentiometer::potentiometer(int channel){
   multipl =  true;
   m_channel = channel;
-  min_angle = -15;
-  max_angle = 15;
+  min_angle = -20;
+  max_angle = 20;
   calibrateM = 0;
 }
 potentiometer::potentiometer(bool multiplexer, int pin, int minimum_angle, int maximum_angle){

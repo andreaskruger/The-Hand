@@ -33,10 +33,10 @@ potentiometer tAD = potentiometer(15);
 
 // Creating list of flexSensor and list of potetiometer objects
 flexSensor pinList[] = {thumbIP, thumbMCP, f1PIP, f1MCP, f2PIP, f2MCP, f3PIP, f3MCP, f4PIP, f4MCP, opposition};
-potentiometer potList[5] = {f1AD,f2AD,f3AD,f4AD,tAD};
+potentiometer potList[4] = {f1AD,f2AD,f3AD,f4AD};
 const int sizeList = sizeof(pinList)/sizeof(int);
 // List of angles of all joints in fingers
-float fingerAngles[14] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+float fingerAngles[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
  // Initiates the multiplexer.
 void initBoard(){
@@ -142,7 +142,7 @@ void calibrateFlexion(){
   Serial.println("HAND OPEN");
   disp_print("HAND OPEN");
   while(calibrateState < 1){delay(50);}
-  for(int i = 0; i<10 ; i++){
+  for(int i = 0; i<11 ; i++){
     pinList[i].calibrate(false);
   }
   Serial.println("OK");
@@ -154,7 +154,7 @@ void calibrateFlexion(){
   Serial.println("HAND CLOSED");
   disp_print("HAND CLOSED");
   while(calibrateState < 2){delay(50);}
-  for(int i = 0; i<10 ; i++){
+  for(int i = 0; i<11 ; i++){
     pinList[i].calibrate(true);
   }
   Serial.println("OK");
@@ -267,30 +267,31 @@ void setup() {
   pinMode(INTERUPT_PIN,INPUT);
   // interupt for start/stop button
   calibrateFlexion();
-  //calibrateAbduction2();                       // Calibrate flextion movement of fingers
+  calibrateAbduction2();                       // Calibrate flextion movement of fingers
   //calibrateAbduction();                     // Calibrate abduction and adduction movement of fingers
 
   attachInterrupt(INTERUPT_PIN, interuptFunc, RISING);
 
-  potList[1].setCalibrateMin(50);
+  /*potList[1].setCalibrateMin(50);
   potList[1].setCalibrateMax(105);
   potList[2].setCalibrateMin(110);
   potList[2].setCalibrateMax(240);
   potList[3].setCalibrateMin(130);
-  potList[3].setCalibrateMax(200);
+  potList[3].setCalibrateMax(200);*/
 }
 
 
 void loop() {
-
-
   //Serial.println(readMux(11));
   //Serial.print(potList[1].getAngle());
   //Serial.write(13);
   //Serial.write(10);
-  
+  delay(20);
   //sendID++;
-  //send(sendID, getAngle(pinList[0],0,0),getAngle(pinList[1],1,1),getAngle(pinList[2],2,2),getAngle(pinList[3],3,3),getAngle(pinList[4],4,4),getAngle(pinList[5],5,5),getAngle(pinList[6],6,6),getAngle(pinList[7],7,7),getAngle(pinList[8],8,8),getAngle(pinList[9],9,9));
+  /*send(sendID, pinList[0].getAngle(),pinList[1].getAngle(),pinList[2].getAngle(),pinList[3].getAngle(),
+  pinList[4].getAngle(),pinList[5].getAngle(),pinList[6].getAngle(),pinList[7].getAngle(),
+  pinList[8].getAngle(),pinList[9].getAngle(),pinList[10].getAngle(),potList[0].getAngle(),potList[1].getAngle(),
+  potList[2].getAngle(),potList[3].getAngle());*/
 
   /*Serial.print(pinList[0].getAngle());
   Serial.print(",");
@@ -311,16 +312,15 @@ void loop() {
   Serial.print(pinList[8].getAngle());
   Serial.print(",");
   Serial.print(pinList[9].getAngle());
+  Serial.print(",");
+  Serial.print(pinList[10].getAngle());  
   Serial.print(",");*/
-  //Serial.print(pinList[10].getAngle());
-  Serial.print(",");  
+  Serial.print(potList[0].getValue());
+  Serial.print(",");
+  Serial.print(potList[1].getValue());
+  Serial.print(",");
   Serial.print(potList[2].getValue());
   Serial.print(",");
- // Serial.print(potList[1].getAngle());
-  //Serial.print(",");
-  //Serial.print(potList[2].getAngle());
-  Serial.print(",");
-  //Serial.println(potList[3].getAngle());
-
-delay(40);
+  Serial.println(potList[3].getValue());
+  delay(25);
 }
