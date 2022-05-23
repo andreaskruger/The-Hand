@@ -43,6 +43,7 @@ flexSensor::flexSensor(bool multiplexer, int pin){
 /**
  * Changes multiplexer to read from int channel and then returns the read value.
  * @return analog reading from multiplexer in input channel.
+ * this method is taken from http://adam-meyer.com/arduino/CD74HC4067 under MIT-License.
 */
 int flexSensor::readMux(int channel){
   int controlPin[] = {s0, s1, s2, s3};
