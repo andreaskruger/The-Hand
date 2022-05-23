@@ -262,7 +262,8 @@ void setup() {
   delay(100);
   // getMACAdress();                          //MAC adress is run for the WIFI to work, the OTHER wearers MAC adress shall be written in this code and vice versa.
   init_wifi();                             // Initiate ESP_NOW
-  initBoard();                             // Initiate breakout board        
+  initBoard();                            // Initiate breakout board 
+  send(1,1,1,1,1,1,11,1,1,1,1,1,11,1,1,11);       
   disp_initialize();                       // Initialise display
   pinMode(INTERUPT_PIN,INPUT);
   // interupt for start/stop button
@@ -293,7 +294,7 @@ void loop() {
   pinList[8].getAngle(),pinList[9].getAngle(),pinList[10].getAngle(),potList[0].getAngle(),potList[1].getAngle(),
   potList[2].getAngle(),potList[3].getAngle());*/
 
-  /*Serial.print(pinList[0].getAngle());
+  Serial.print(pinList[0].getAngle());
   Serial.print(",");
   Serial.print(pinList[1].getAngle());
   Serial.print(",");
@@ -314,13 +315,13 @@ void loop() {
   Serial.print(pinList[9].getAngle());
   Serial.print(",");
   Serial.print(pinList[10].getAngle());  
-  Serial.print(",");*/
-  Serial.print(potList[0].getValue());
   Serial.print(",");
-  Serial.print(potList[1].getValue());
+  Serial.print(potList[0].getAngle());
   Serial.print(",");
-  Serial.print(potList[2].getValue());
+  Serial.print(potList[1].getAngle());
   Serial.print(",");
-  Serial.println(potList[3].getValue());
+  Serial.print(potList[2].getAngle());
+  Serial.print(",");
+  Serial.println(potList[3].getAngle());
   delay(25);
 }
