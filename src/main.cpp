@@ -249,9 +249,9 @@ void calibrateAbduction2(){
   potList[3].calibrate(true);
 
   potList[0].setCalibrateMax(2*pot0_mean - potList[0].getCalibrateMin());
-  potList[0].setCalibrateMax(2*pot0_mean - potList[0].getCalibrateMin());
-  potList[0].setCalibrateMin(2*pot0_mean - potList[0].getCalibrateMax());
-  potList[0].setCalibrateMin(2*pot0_mean - potList[0].getCalibrateMax());
+  potList[1].setCalibrateMax(2*pot0_mean - potList[1].getCalibrateMin());
+  potList[2].setCalibrateMin(2*pot0_mean - potList[2].getCalibrateMax());
+  potList[3].setCalibrateMin(2*pot0_mean - potList[3].getCalibrateMax());
   Serial.println("Calibration complete");
   calibrateState = 0;
   detachInterrupt(INTERUPT_PIN);
@@ -290,10 +290,10 @@ void loop() {
   //Serial.write(10);
   delay(20);
   //sendID++;
-  /*send(sendID, pinList[0].getAngle(),pinList[1].getAngle(),pinList[2].getAngle(),pinList[3].getAngle(),
+  send(sendID, pinList[0].getAngle(),pinList[1].getAngle(),pinList[2].getAngle(),pinList[3].getAngle(),
   pinList[4].getAngle(),pinList[5].getAngle(),pinList[6].getAngle(),pinList[7].getAngle(),
-  pinList[8].getAngle(),pinList[9].getAngle(),pinList[10].getAngle(),potList[0].getAngle(),potList[1].getAngle(),
-  potList[2].getAngle(),potList[3].getAngle());*/
+  pinList[8].getAngle(),pinList[9].getAngle(),pinList[10].getAngle(),potList[0].getAngle(),0,
+  0,0);
 
   Serial.print(pinList[0].getAngle());
   Serial.print(",");
@@ -319,10 +319,16 @@ void loop() {
   Serial.print(",");
   Serial.print(potList[0].getAngle());
   Serial.print(",");
-  Serial.print(potList[1].getAngle());
+  Serial.print(0);
   Serial.print(",");
-  Serial.print(potList[2].getAngle());
+  Serial.print(0);
   Serial.print(",");
+<<<<<<< HEAD
   Serial.println(potList[3].getAngle());
   delay(25);
 }
+=======
+  Serial.println(0);
+  delay(40);
+}
+>>>>>>> 175bc933f07c63f63a31fca9da7c0734a2e6a03b
