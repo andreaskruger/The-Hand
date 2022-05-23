@@ -39,14 +39,10 @@ typedef struct struct_message{
   float finger4MCP;
   float thumbOpp;
   float finger1Pot;
-  float finger2Po;
-  float finger3Po;
-  float finger4Po;
+  float finger2Pot;
+  float finger3Pot;
+  float finger4Pot;
   float opposition;
-  float pot1;
-  float pot2;
-  float pot3;
-  float pot4;
 }struct_message;
  
 struct_message msg_to_send;
@@ -128,11 +124,11 @@ void send(float sendID, float thumbIP, float thumbMCP, float finger1PIP, float f
   msg_to_send.finger4PIP = finger4PIP;
   msg_to_send.finger4MCP = finger4MCP;
   msg_to_send.opposition = opposition;
-  msg_to_send.pot1 = pot1;
-  msg_to_send.pot2 = pot2;
-  msg_to_send.pot3 = pot3;
-  msg_to_send.pot4 = pot4;
-
+  msg_to_send.finger1Pot = pot1;
+  msg_to_send.finger2Pot = pot2;
+  msg_to_send.finger3Pot = pot3;
+  msg_to_send.finger4Pot = pot4;
+  
   esp_err_t result = esp_now_send(broadcastAdress, (uint8_t *) &msg_to_send, sizeof(msg_to_send));
 }
 /**
