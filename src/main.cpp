@@ -180,19 +180,9 @@ void loop() {
   
   sendID++;
 
-  send(sendID, mf_thumbIP.getMedian(), mf_thumbMCP.getMedian(), mf_f1PIP.getMedian(), mf_f1MCP.getMedian(), mf_f2PIP.getMedian(), mf_f2MCP.getMedian(), mf_f3PIP.getMedian(), mf_f3MCP.getMedian(), mf_f4PIP.getMedian(), mf_f4MCP.getMedian());
+  send(1,2,3,4,5,6,7,8,9,10,11);
   //send(sendID, getAngle(pinList[0],0,0),getAngle(pinList[1],1,1),getAngle(pinList[2],2,2),getAngle(pinList[3],3,3),getAngle(pinList[4],4,4),getAngle(pinList[5],5,5),getAngle(pinList[6],6,6),getAngle(pinList[7],7,7),getAngle(pinList[8],8,8),getAngle(pinList[9],9,9));
   
-
-  digitalWrite(s0,LOW);
-  digitalWrite(s1,LOW);
-  digitalWrite(s2,LOW);
-  digitalWrite(s3,LOW);
-  
-  mf_f1PIP.addSample(getAngle(SIG_PIN, 4, 4));
-  Serial.print(mf_f1PIP.getMedian());
-  Serial.write(13);
-  Serial.write(10);
  /*
   Serial.print(mf_thumbIP.getMedian());
   Serial.print(" ");

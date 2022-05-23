@@ -36,8 +36,8 @@ struct_message msg_incoming;
 
 // Callback when data is sent, triggas när något skickas
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-    /*Serial.print("\r\nLast Packet Send Status:\t");
-    //Serial.write((String)mac_addr));
+    Serial.print("\r\nLast Packet Send Status:\t");
+    /*//Serial.write((String)mac_addr));
     Serial.print(mac_addr[0], HEX);
     Serial.print(",");
     Serial.print(mac_addr[1], HEX);
@@ -48,30 +48,21 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
     Serial.print(",");
     Serial.print(mac_addr[4], HEX);
     Serial.print(",");
-    Serial.println(mac_addr[5], HEX);
-    Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
+    Serial.println(mac_addr[5], HEX);*/
+    Serial.print(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success: " : "Delivery Fail: ");
     if(status == ESP_NOW_SEND_FAIL){
       error++;
     }else{ 
       succ++;
-    }*/
+    }
+    Serial.println(error);
 }
 
 // Callback when data is received, triggas när något mottas (används ej)
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&msg_incoming, incomingData, sizeof(msg_incoming));
   recID = msg_incoming.sendID;
-  Serial.println("thumbIP: " + String(msg_incoming.thumbIP));
-  Serial.println("thumbMCP: " + String(msg_incoming.thumbIP));
-  Serial.println("finger1PIP: " + String(msg_incoming.finger1PIP));
-  Serial.println("finger1MCP: " + String(msg_incoming.finger1MCP));
-  Serial.println("finger2PIP: " + String(msg_incoming.finger2PIP));
-  Serial.println("finger2MCP: " + String(msg_incoming.finger2MCP));
-  Serial.println("finger3PIP: " + String(msg_incoming.finger3PIP));
-  Serial.println("finger3MCP: " + String(msg_incoming.finger3MCP));
-  Serial.println("finger4PIP: " + String(msg_incoming.finger4PIP));
-  Serial.println("finger4MCP: " + String(msg_incoming.finger4MCP));
-  Serial.println();
+  Serial.println(recID);
 }
 
 void getMACAdress(){
