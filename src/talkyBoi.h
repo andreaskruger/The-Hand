@@ -85,7 +85,7 @@ void getMACAdress(){
  * Also inits the ESPNOW protocol with MAC-adresses and peerInfo.
  */
 void init_wifi(){
-  WiFi.mode(WIFI_STA);
+   WiFi.mode(WIFI_STA);
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
