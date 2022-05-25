@@ -262,7 +262,7 @@ void setup() {
   delay(100);
   // getMACAdress();                          //MAC adress is run for the WIFI to work, the OTHER wearers MAC adress shall be written in this code and vice versa.
   init_wifi();                             // Initiate ESP_NOW
-  send(1,1,1,1,1,1,11,1,1,1,1,1,11,1,1,11);  
+  //send(1,1,1,1,1,1,11,1,1,1,1,1,11,1,1,11);  
   //initBoard();                            // Initiate breakout board 
        
   //disp_initialize();                       // Initialise display
