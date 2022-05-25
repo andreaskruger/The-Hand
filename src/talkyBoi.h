@@ -26,10 +26,11 @@ typedef struct struct_message{
   float finger4PIP;
   float finger4MCP;
   float thumbOpp;
-  float test12;
-  float test13;
-  float test14;
-  float test15;
+  float finger1Pot;
+  float finger2Pot;
+  float finger3Pot;
+  float finger4Pot;
+  float opposition;
 }struct_message;
  
 struct_message msg_to_send;
@@ -93,7 +94,7 @@ void init_wifi (){
   esp_now_register_recv_cb(OnDataRecv);
 }
 
-void send (float sendID, float thumbIP, float thumbMCP, float finger1PIP, float finger1MCP, float finger2PIP, float finger2MCP, float finger3PIP, float finger3MCP, float finger4PIP, float finger4MCP){
+void send (float sendID, float thumbIP, float thumbMCP, float finger1PIP, float finger1MCP, float finger2PIP, float finger2MCP, float finger3PIP, float finger3MCP, float finger4PIP, float finger4MCP, float opp, float pot1, float pot2, float pot3, float pot4){
   //uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8};
   msg_to_send.sendID = sendID;
   msg_to_send.thumbIP = thumbIP;
@@ -106,6 +107,11 @@ void send (float sendID, float thumbIP, float thumbMCP, float finger1PIP, float 
   msg_to_send.finger3MCP = finger3MCP;
   msg_to_send.finger4PIP = finger4PIP;
   msg_to_send.finger4MCP = finger4MCP;
+  msg_to_send.opposition = opp;
+  msg_to_send.finger1Pot = pot1;
+  msg_to_send.finger2Pot = pot2;
+  msg_to_send.finger3Pot = pot3;
+  msg_to_send.finger4Pot = pot4;
 
   esp_err_t result = esp_now_send(broadcastAdress, (uint8_t *) &msg_to_send, sizeof(msg_to_send));
 }
