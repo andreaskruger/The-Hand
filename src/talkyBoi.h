@@ -16,9 +16,9 @@
 #include <esp_now.h>
 #include "Config.h"
 
-uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE6,0x79,0x9C}; //MAC-adress black tape
+//uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE6,0x79,0x9C}; //MAC-adress black tape
 //uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8}; //MAC-adress silver tape
-//uint8_t broadcastAdress[] = {0x7C,0x9E,0xBD,0x60,0xD1,0x8C}; //MAC masking tape
+uint8_t broadcastAdress[] = {0x7C,0x9E,0xBD,0x60,0xD1,0x8C}; //MAC masking tape
 //uint8_t broadcastAdressModel[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4}; //MAC white tape
 
 int recID = 0;
@@ -89,7 +89,7 @@ void init_wifi(){
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
-  }
+  }else{Serial.println("INit not working");}
  
   esp_now_register_send_cb(OnDataSent);
  
@@ -130,19 +130,4 @@ void send(float sendID, float thumbIP, float thumbMCP, float finger1PIP, float f
   msg_to_send.finger4Pot = pot4;
   
   esp_err_t result = esp_now_send(broadcastAdress, (uint8_t *) &msg_to_send, sizeof(msg_to_send));
-}
-/**
- * This is not used.
- */
-void sendToModel(int sendID, float thumbIP, float thumbMCP){
-  Serial.println("Send to model : ");
-  uint8_t broadcastAdress[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4};
-  msg_to_send.sendID = sendID;
-  esp_err_t result = esp_now_send(broadcastAdress,(uint8_t *) &msg_to_send, sizeof(msg_to_send));
-}
-/**
- * This is not used.
- */
-void recieve() {
-  
 }

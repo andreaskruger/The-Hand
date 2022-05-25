@@ -263,16 +263,16 @@ void setup() {
   // getMACAdress();                          //MAC adress is run for the WIFI to work, the OTHER wearers MAC adress shall be written in this code and vice versa.
   init_wifi();                             // Initiate ESP_NOW
   send(1,1,1,1,1,1,11,1,1,1,1,1,11,1,1,11);  
-  initBoard();                            // Initiate breakout board 
+  //initBoard();                            // Initiate breakout board 
        
-  disp_initialize();                       // Initialise display
-  pinMode(INTERUPT_PIN,INPUT);
+  //disp_initialize();                       // Initialise display
+  //pinMode(INTERUPT_PIN,INPUT);
   // interupt for start/stop button
-  calibrateFlexion();
-  calibrateAbduction2();                       // Calibrate flextion movement of fingers
+  //calibrateFlexion();
+  //calibrateAbduction2();                       // Calibrate flextion movement of fingers
   //calibrateAbduction();                     // Calibrate abduction and adduction movement of fingers
 
-  attachInterrupt(INTERUPT_PIN, interuptFunc, RISING);
+  //attachInterrupt(INTERUPT_PIN, interuptFunc, RISING);
 
   /*potList[1].setCalibrateMin(50);
   potList[1].setCalibrateMax(105);
@@ -290,11 +290,11 @@ void loop() {
   //Serial.write(10);
   delay(20);
   //sendID++;
-  send(sendID, pinList[0].getAngle(),pinList[1].getAngle(),pinList[2].getAngle(),pinList[3].getAngle(),
+  /*send(sendID, pinList[0].getAngle(),pinList[1].getAngle(),pinList[2].getAngle(),pinList[3].getAngle(),
   pinList[4].getAngle(),pinList[5].getAngle(),pinList[6].getAngle(),pinList[7].getAngle(),
   pinList[8].getAngle(),pinList[9].getAngle(),pinList[10].getAngle(),potList[0].getAngle(),0,
-  0,0);
-
+  0,0);*/
+  /*
   Serial.print(pinList[0].getAngle());
   Serial.print(",");
   Serial.print(pinList[1].getAngle());
@@ -323,12 +323,6 @@ void loop() {
   Serial.print(",");
   Serial.print(0);
   Serial.print(",");
-<<<<<<< HEAD
-  Serial.println(potList[3].getAngle());
-  delay(25);
-}
-=======
-  Serial.println(0);
+  Serial.println(0);*/
   delay(40);
 }
->>>>>>> 175bc933f07c63f63a31fca9da7c0734a2e6a03b
