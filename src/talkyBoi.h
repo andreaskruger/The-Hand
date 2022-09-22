@@ -2,11 +2,11 @@
 #include <WiFi.h>
 #include <esp_now.h>
 
-//uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE6,0x79,0x9C}; //MAC-adress till den svarta/andra gruppen
+uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE6,0x79,0x9C}; //MAC-adress till den svarta/andra gruppen
 //uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8}; //MAC-adress till den silver
 //uint8_t broadcastAdress[] = {0x7C,0x9E,0xBD,0x60,0xD1,0x8C}; //MAC till den med maskering
 //uint8_t broadcastAdress[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4}; //MAC till den med vit tejp
-uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE4,0x84,0x34};
+//uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE4,0x84,0x34};
 
 
 int recID = 0;
@@ -59,12 +59,63 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
     }
     Serial.println(error);
 }
+void send(float sendID, float thumbIP, float thumbMCP, float finger1PIP, float finger1MCP, float finger2PIP, float finger2MCP, float finger3PIP, float finger3MCP, float finger4PIP, float finger4MCP,float opposition,float pot1,float pot2,float pot3,float pot4){
+  msg_to_send.sendID = sendID;
+  msg_to_send.thumbIP = thumbIP;
+  msg_to_send.thumbMCP = thumbMCP;
+  msg_to_send.finger1PIP = finger1PIP;
+  msg_to_send.finger1MCP = finger1MCP;
+  msg_to_send.finger2PIP = finger2PIP;
+  msg_to_send.finger2MCP = finger2MCP;
+  msg_to_send.finger3PIP = finger3PIP;
+  msg_to_send.finger3MCP = finger3MCP;
+  msg_to_send.finger4PIP = finger4PIP;
+  msg_to_send.finger4MCP = finger4MCP;
+  msg_to_send.opposition = opposition;
+  msg_to_send.finger1Pot = pot1;
+  msg_to_send.finger2Pot = pot2;
+  msg_to_send.finger3Pot = pot3;
+  msg_to_send.finger4Pot = pot4;
+  
+  esp_err_t result = esp_now_send(broadcastAdress, (uint8_t *) &msg_to_send, sizeof(msg_to_send));
+}
 
 // Callback when data is received, triggas när något mottas (används ej)
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&msg_incoming, incomingData, sizeof(msg_incoming));
-  recID = msg_incoming.sendID;
-  Serial.println(recID);
+  Serial.print(msg_incoming.thumbIP);
+  Serial.print(",");
+  Serial.print(msg_incoming.thumbMCP);
+  Serial.print(",");
+  Serial.print(msg_incoming.finger1PIP);
+  Serial.print(",");
+  Serial.print(msg_incoming.finger1MCP);
+  Serial.print(",");
+  Serial.print(msg_incoming.finger2PIP);
+  Serial.print(",");
+  Serial.print(msg_incoming.finger2MCP);
+  Serial.print(",");
+  Serial.print(msg_incoming.finger3PIP);
+  Serial.print(",");
+  Serial.print(msg_incoming.finger3MCP);
+  Serial.print(",");
+  Serial.print(msg_incoming.finger4PIP);
+  Serial.print(",");
+  Serial.print(msg_incoming.finger4MCP);
+  Serial.print(",");
+  Serial.print(msg_incoming.opposition);  
+  Serial.print(",");
+  Serial.print(msg_incoming.finger1Pot);
+  Serial.print(",");
+  Serial.print(0);
+  Serial.print(",");
+  Serial.print(0);
+  Serial.print(",");
+  Serial.println(0);
+  send(1, msg_incoming.thumbIP,msg_incoming.thumbMCP,msg_incoming.finger1PIP,msg_incoming.finger1MCP,
+  msg_incoming.finger2PIP,msg_incoming.finger2MCP,msg_incoming.finger3PIP,msg_incoming.finger3MCP,
+  msg_incoming.finger4PIP,msg_incoming.finger4MCP,msg_incoming.opposition,msg_incoming.finger1Pot,0,
+  0,0);
 }
 
 void getMACAdress(){
@@ -94,27 +145,7 @@ void init_wifi (){
   esp_now_register_recv_cb(OnDataRecv);
 }
 
-void send (float sendID, float thumbIP, float thumbMCP, float finger1PIP, float finger1MCP, float finger2PIP, float finger2MCP, float finger3PIP, float finger3MCP, float finger4PIP, float finger4MCP, float opp, float pot1, float pot2, float pot3, float pot4){
-  //uint8_t broadcastAdress[] = {0x94,0xB9,0x7E,0xE5,0x31,0xD8};
-  msg_to_send.sendID = sendID;
-  msg_to_send.thumbIP = thumbIP;
-  msg_to_send.thumbMCP = thumbMCP;
-  msg_to_send.finger1PIP = finger1PIP;
-  msg_to_send.finger1MCP = finger1MCP;
-  msg_to_send.finger2PIP = finger2PIP;
-  msg_to_send.finger2MCP = finger2MCP;
-  msg_to_send.finger3PIP = finger3PIP;
-  msg_to_send.finger3MCP = finger3MCP;
-  msg_to_send.finger4PIP = finger4PIP;
-  msg_to_send.finger4MCP = finger4MCP;
-  msg_to_send.opposition = opp;
-  msg_to_send.finger1Pot = pot1;
-  msg_to_send.finger2Pot = pot2;
-  msg_to_send.finger3Pot = pot3;
-  msg_to_send.finger4Pot = pot4;
 
-  esp_err_t result = esp_now_send(broadcastAdress, (uint8_t *) &msg_to_send, sizeof(msg_to_send));
-}
 
 void sendToModel(int sendID, float thumbIP, float thumbMCP){
   Serial.println("Send to model : ");

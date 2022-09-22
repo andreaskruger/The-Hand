@@ -12,16 +12,16 @@ int state = 0;
 int calibrateState = 0;
 
 // Declaring all flexSensor objects
-flexSensor thumbIP = flexSensor(0);
-flexSensor thumbMCP = flexSensor(1);
-flexSensor f1PIP = flexSensor(2);
-flexSensor f1MCP = flexSensor(3);
-flexSensor f2PIP = flexSensor(4);
-flexSensor f2MCP = flexSensor(5);
-flexSensor f3PIP = flexSensor(6);
-flexSensor f3MCP = flexSensor(7);
-flexSensor f4PIP = flexSensor(8);
-flexSensor f4MCP = flexSensor(9);
+flexSensor thumbIP = flexSensor(8);
+flexSensor thumbMCP = flexSensor(9);
+flexSensor f1PIP = flexSensor(0);
+flexSensor f1MCP = flexSensor(1);
+flexSensor f2PIP = flexSensor(2);
+flexSensor f2MCP = flexSensor(3);
+flexSensor f3PIP = flexSensor(4);
+flexSensor f3MCP = flexSensor(5);
+flexSensor f4PIP = flexSensor(6);
+flexSensor f4MCP = flexSensor(7);
 flexSensor opposition = flexSensor(10);
 
 // Declaring all potentiometer objects
@@ -263,16 +263,16 @@ void setup() {
   getMACAdress();                          //MAC adress is run for the WIFI to work, the OTHER wearers MAC adress shall be written in this code and vice versa.
   init_wifi();                             // Initiate ESP_NOW
   //send(1,1,1,1,1,1,11,1,1,1,1,1,11,1,1,11);  
-  initBoard();                            // Initiate breakout board 
+  //initBoard();                            // Initiate breakout board 
        
-  disp_initialize();                       // Initialise display
-  pinMode(INTERUPT_PIN,INPUT);
+  //disp_initialize();                       // Initialise display
+  //pinMode(INTERUPT_PIN,INPUT);
   // interupt for start/stop button
-  calibrateFlexion();
+  //calibrateFlexion();
   //calibrateAbduction2();                       // Calibrate flextion movement of fingers
   //calibrateAbduction();                     // Calibrate abduction and adduction movement of fingers
 
-  //attachInterrupt(INTERUPT_PIN, interuptFunc, RISING);
+  attachInterrupt(INTERUPT_PIN, interuptFunc, RISING);
 
   /*potList[1].setCalibrateMin(50);
   potList[1].setCalibrateMax(105);
@@ -288,13 +288,13 @@ void loop() {
   //Serial.print(potList[1].getAngle());
   //Serial.write(13);
   //Serial.write(10);
-  delay(20);
+  //delay(20);
   //sendID++;
-  send(sendID, pinList[0].getAngle(),pinList[1].getAngle(),pinList[2].getAngle(),pinList[3].getAngle(),
+  /*send(sendID, pinList[0].getAngle(),pinList[1].getAngle(),pinList[2].getAngle(),pinList[3].getAngle(),
   pinList[4].getAngle(),pinList[5].getAngle(),pinList[6].getAngle(),pinList[7].getAngle(),
   pinList[8].getAngle(),pinList[9].getAngle(),pinList[10].getAngle(),potList[0].getAngle(),0,
-  0,0);
-  
+  0,0);*/
+  /*
   Serial.print(pinList[0].getAngle());
   Serial.print(",");
   Serial.print(pinList[1].getAngle());
@@ -323,6 +323,6 @@ void loop() {
   Serial.print(",");
   Serial.print(0);
   Serial.print(",");
-  Serial.println(0);
-  delay(40);
+  Serial.println(0);*/
+  //delay(40);
 }
