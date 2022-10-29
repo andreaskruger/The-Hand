@@ -145,8 +145,6 @@ void init_wifi (){
   esp_now_register_recv_cb(OnDataRecv);
 }
 
-
-
 void sendToModel(int sendID, float thumbIP, float thumbMCP){
   Serial.println("Send to model : ");
   uint8_t broadcastAdress[] = {0X7C,0X9E,0XBD,0X61,0X58,0XF4};
