@@ -165,7 +165,6 @@ void setup() {
 
 void loop() {
   while(state){delay(10);}                                             //interupt for pin 16 button
-  /*
   mf_thumbIP.addSample(getAngle(pinList[0], 0, 0));
   mf_thumbMCP.addSample(getAngle(pinList[1], 1, 1));;
   mf_f1PIP.addSample(getAngle(pinList[2], 2, 2));;			
@@ -176,14 +175,10 @@ void loop() {
   mf_f3MCP.addSample(getAngle(pinList[7], 7, 7));;
   mf_f4PIP.addSample(getAngle(pinList[8], 8, 8));;
   mf_f4MCP.addSample(getAngle(pinList[9], 9, 9));;
-  */
   
   sendID++;
-
-  send(1,2,3,4,5,6,7,8,9,10,11);
-  //send(sendID, getAngle(pinList[0],0,0),getAngle(pinList[1],1,1),getAngle(pinList[2],2,2),getAngle(pinList[3],3,3),getAngle(pinList[4],4,4),getAngle(pinList[5],5,5),getAngle(pinList[6],6,6),getAngle(pinList[7],7,7),getAngle(pinList[8],8,8),getAngle(pinList[9],9,9));
+  send(sendID, getAngle(pinList[0],0,0),getAngle(pinList[1],1,1),getAngle(pinList[2],2,2),getAngle(pinList[3],3,3),getAngle(pinList[4],4,4),getAngle(pinList[5],5,5),getAngle(pinList[6],6,6),getAngle(pinList[7],7,7),getAngle(pinList[8],8,8),getAngle(pinList[9],9,9));
   
- /*
   Serial.print(mf_thumbIP.getMedian());
   Serial.print(" ");
   Serial.print(mf_thumbMCP.getMedian());
@@ -203,8 +198,6 @@ void loop() {
   Serial.print(mf_f4PIP.getMedian());
   Serial.print(" ");
   Serial.println(mf_f4MCP.getMedian());
-  */
-
   delay(16);
 }
 
